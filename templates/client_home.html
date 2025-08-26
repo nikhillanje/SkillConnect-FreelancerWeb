@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillConnect - Home</title>
+    <link rel="stylesheet" href="{% static 'css/client_home.css' %}">
+</head>
+
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">SkillConnect</div>
+            <p style="width: 110px; margin-left: auto;">{{ client.first_name }} {{ client.last_name }}</p>
+
+            <div class="profile-icons">
+                <a href="{% url 'client_profile' client_id %}">
+                    {% if client_info.profile_picture %}
+                    <img src="{{ client_info.profile_picture.url }}" alt="Client" class="user-icon">
+                    {% else %}
+                    <img src="{% static 'images/user-icon.png' %}" alt="Client" class="user-icon">
+                    {% endif %}
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="main-content">
+            <div class="search-jobs-section">
+                <div class="search-container">
+                    <input type="text" placeholder="Search for jobs">
+                </div>
+                <h3>Freelancer's Responses</h3>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="profile-card">
+                {% if client_info.profile_picture %}
+                <img src="{{ client_info.profile_picture.url }}" alt="Client" class="profile-picture">
+                {% else %}
+                <img src="{% static 'images/user-icon.png' %}" alt="Client" class="profile-picture">
+                {% endif %}
+
+                <h1>{{ client.first_name }} {{client.last_name}}</h1>
+                <h4>Bio</h4>
+                <p>{{ client_info.about }}</p>
+                <h4>Company Name</h4>
+                <p>{{ client_info.company_name }}</p>
+                <h4>Industry Name</h4>
+                <p>{{ client_info.industry }}</p>
+                <h4>Location</h4>
+                <p>{{ client_info.location }}</p>
+                <h4>Requirements</h4>
+                <p>{{ client_info.requirements }}</p>
+                <h4>Budget</h4>
+                <p>{{ client_info.budget }}</p>
+                <br>
+
+                <div class="logout-section">
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit"
+                            style="background-color:red; color:white; border:none; padding:10px 15px; border-radius:6px; cursor:pointer; font-size:14px; font-weight:bold;">
+                            Logout
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </aside>
+    </main>
+</body>
+
+</html>

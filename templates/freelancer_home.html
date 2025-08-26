@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillConnect - Home</title>
+    <link rel="stylesheet" href="{% static 'css/freelancer_home.css' %}">
+</head>
+
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">SkillConnect</div>
+            <p style="width: 150px; margin-left: auto;">{{ freelancer.first_name }} {{ freelancer.last_name }}</p>
+            <div class="profile-icons">
+
+                <a href="{% url 'freelancer_profile' user_id %}">
+
+                    {% if freelancer_info.profile_picture %}
+                    <img src="{{ freelancer_info.profile_picture.url }}" alt="User" class="user-icon">
+                    {% else %}
+                    <img src="{% static 'images/user-icon.png' %}" alt="User" class="user-icon">
+                    {% endif %}
+                </a>
+
+            </div>
+        </nav>
+    </header>
+
+
+
+    <main class="container">
+        <div class="main-content">
+            <div class="search-jobs-section">
+                <div class="search-container">
+                    <input type="text" placeholder="Search for jobs">
+                </div>
+                <h3>Jobs you might like</h3>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="profile-card">
+                {% if freelancer_info.profile_picture %}
+                <img src="{{ freelancer_info.profile_picture.url }}" alt="Freelancer" class="profile-picture">
+                {% else %}
+                <img src="{% static 'images/user-icon.png' %}" alt="Freelancer" class="profile-picture">
+                {% endif %}
+                <h1>{{ freelancer.first_name }} {{ freelancer.last_name }}</h1>
+                <h4>Bio</h4>
+                <p>{{ freelancer_info.bio }}</p>
+                <h4>Skills</h4>
+                <p>{{ freelancer_info.skills }}</p>
+                <h4>Education</h4>
+                <p>{{ freelancer_info.education }}</p>
+                <h4>Experiance</h4>
+                <p>{{ freelancer_info.experience }}</p>
+                <h4>Address</h4>
+                <p>{{ freelancer_info.address }}</p>
+                <h4>Language</h4>
+                <p>{{ freelancer_info.language }}</p>
+                <br>
+
+                <div class="logout-section">
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit"
+                            style="background-color:red; color:white; border:none; padding:10px 15px; border-radius:6px; cursor:pointer; font-size:14px; font-weight:bold;">
+                            Logout
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </aside>
+    </main>
+</body>
+
+</html>

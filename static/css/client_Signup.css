@@ -1,0 +1,327 @@
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: #fff;
+    color: #1c1c1c;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 50px;
+    box-sizing: border-box;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 600;
+    color: #14a800;
+}
+
+.hire-talent {
+    font-size: 14px;
+}
+
+.client-link {
+    color: #14a800;
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 5px;
+}
+
+.container {
+    width: 100%;
+    max-width: 600px;
+    /* Increased width */
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    height: 80px;
+}
+
+.form-container {
+    width: 100%;
+    max-width: 500px;
+    /* Increased width */
+    padding: 40px;
+    background-color: #f7f7f8;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+h2 {
+    font-weight: 600;
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #1c1c1c;
+}
+
+.or-separator {
+    text-align: center;
+    margin: 20px 0;
+    position: relative;
+    color: #6d6d6d;
+}
+
+.or-separator::before,
+.or-separator::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 40%;
+    height: 1px;
+    background-color: #e0e0e0;
+}
+
+.or-separator::before {
+    left: 0;
+}
+
+.or-separator::after {
+    right: 0;
+}
+
+.input-group-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.input-group {
+    width: 100%;
+    text-align: left;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+/* New class for the mobile number input and button */
+.input-group-with-button {
+    display: flex;
+    align-items: flex-end;
+    /* Aligns items to the bottom */
+    gap: 10px;
+    /* Space between input and button */
+    margin-bottom: 15px;
+}
+
+.input-group-with-button .input-group {
+    flex-grow: 1;
+    /* Makes the input field take up available space */
+    margin-bottom: 0;
+    /* Remove bottom margin to align correctly */
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.input-group input,
+.input-group select {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #c3c3c3;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+    border-color: #14a800;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(20, 168, 0, 0.2);
+}
+
+.password-group {
+    position: relative;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 15px;
+    top: 38px;
+    cursor: pointer;
+}
+
+.password-toggle svg {
+    color: #6d6d6d;
+}
+
+.checkbox-group {
+    text-align: left;
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 10px;
+    margin-top: 2px;
+}
+
+.checkbox-group a {
+    color: #14a800;
+    text-decoration: none;
+}
+
+.checkbox-group a:hover {
+    text-decoration: underline;
+}
+
+.verify-btn {
+    padding: 10px 15px;
+    background-color: transparent;
+    border: 1px solid #14a800;
+    color: #14a800;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    white-space: nowrap;
+    /* Prevents button text from wrapping */
+}
+
+.verify-btn:hover {
+    background-color: #14a800;
+    color: #fff;
+}
+
+.create-account-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #14a800;
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+
+.create-account-btn:hover {
+    background-color: #108a00;
+}
+
+.login-prompt {
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+.login-prompt a {
+    color: #14a800;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.login-prompt a:hover {
+    text-decoration: underline;
+}
+
+
+/* Modal (popup) styles for OTP verification */
+.modal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1000;
+    /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 30px;
+    border: 1px solid #888;
+    width: 90%;
+    max-width: 400px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    text-align: center;
+}
+
+.close-btn {
+    color: #aaa;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-content h3 {
+    margin-top: 0;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.modal-content p {
+    color: #6d6d6d;
+}
+
+.modal-content input[type="text"] {
+    font-size: 18px;
+    text-align: center;
+}
+
+.verify-otp-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #14a800;
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+}
+
+.verify-otp-btn:hover {
+    background-color: #108a00;
+}
+
+.resend-link {
+    margin-top: 15px;
+    font-size: 14px;
+}

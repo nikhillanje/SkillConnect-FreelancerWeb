@@ -1,0 +1,288 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillConnect - Your Freelancing Hub</title>
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="logo">
+            <a href="/">
+                <img src="{% static 'images/logo.png' %}" alt="SkillConnect Logo" class="logo-img">
+            </a>
+        </div>
+        <!-- <nav class="nav">
+            <ul class="nav-links">
+                <li><a href="#">Find talent <i class="fa-solid fa-caret-down"></i></a></li>
+                <li><a href="#">Find work <i class="fa-solid fa-caret-down"></i></a></li>
+                <li><a href="#">Why SkillConnect <i class="fa-solid fa-caret-down"></i></a></li>
+                <li><a href="#">Pricing</a></li>
+            </ul>
+        </nav> -->
+        <div class="user-actions">
+            <a href="{% url 'admin:index' %}" class="login-btn">Admin</a>
+            <a href="{% url 'login' %}" class="login-btn">Log in</a>
+            <a href="{% url 'role' %}" class="signup-btn">Sign up</a>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <!-- <h1>Connecting work with skill</h1> -->
+                <i>
+                    <h1 id="typing"></h1>
+                </i>
+                <p class="skillconnect-description">
+                    SkillConnect is a modern freelancing platform designed to connect skilled professionals with
+                    businesses and individuals seeking talent. With a focus on simplicity, trust, and efficiency,
+                    SkillConnect makes it easy for freelancers to showcase their expertise and for clients to find the
+                    right match for their projects. Whether you’re hiring or looking for work, our platform provides a
+                    seamless experience with secure collaboration, transparent communication, and opportunities that
+                    help both freelancers and businesses grow together.
+                </p>
+
+                <!-- <div class="search-container">
+                <div class="search-tabs">
+                    <button class="search-tab active">Find talent</button>
+                    <button class="search-tab">Browse jobs</button>
+                </div>
+                <div class="search-box">
+                    <input type="text" placeholder="Search by role, skills, or keywords">
+                    <button class="search-btn"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+                </div>
+            </div>
+            <div class="client-logos">
+                <img src="https://via.placeholder.com/100x40.png?text=Microsoft" alt="Microsoft Logo">
+                <img src="https://via.placeholder.com/100x40.png?text=Airbnb" alt="Airbnb Logo">
+                <img src="https://via.placeholder.com/100x40.png?text=Glassdoor" alt="Glassdoor Logo">
+            </div> -->
+            </div>
+
+        </div>
+        <div class="hero-image">
+            <img src="{% static 'images/home.png' %}" alt="SkillConnect Hero">
+        </div>
+    </section>
+
+
+    <section class="how-it-works">
+        <div class="how-it-works-container">
+            <div class="header" style="border-bottom: none;">
+                <h2>How it works</h2>
+                <div class="toggle-buttons">
+                    <button class="toggle-btn active" data-tab="hiring">For hiring</button>
+                    <button class="toggle-btn" data-tab="finding">For finding work</button>
+                </div>
+            </div>
+
+            <!-- Hiring Content -->
+            <div class="cards-container tab-content active" id="hiring">
+                <div class="card">
+                    <img src="{% static 'images/home1.png' %}" alt="img1">
+                    <p>Posting jobs is always free</p>
+                </div>
+                <div class="card">
+                    <img src="{% static 'images/home2.png' %}" alt="img2">
+                    <p>Get proposals and hire</p>
+                </div>
+                <div class="card">
+                    <img src="{% static 'images/home3.png' %}" alt="img3">
+                    <p>Pay when work is done</p>
+                </div>
+            </div>
+
+            <!-- Finding Work Content -->
+            <div class="cards-container tab-content" id="finding">
+                <div class="card">
+                    <img src="{% static 'images/home4.png' %}" alt="img4">
+                    <p>Find jobs that match your skills</p>
+                </div>
+                <div class="card">
+                    <img src="{% static 'images/home5.png' %}" alt="img5">
+                    <p>Send proposals easily</p>
+                </div>
+                <div class="card">
+                    <img src="{% static 'images/home6.png' %}" alt="img6">
+                    <p>Get paid securely</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <section class="testimonials">
+        <h2>Real results from clients</h2>
+        <div class="testimonial-grid">
+            <div class="testimonial-card">
+                <div class="header-icon"><i class="fa-solid fa-code"></i> DEV & IT</div>
+                <p>"Haris came in and helped us transfer knowledge from our departing developer, meeting a serious
+                    deadline, without fail. His knowledge and experience are exceptional."</p>
+                <div class="rating">
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                </div>
+                <div class="freelancer-info">
+                    <div class="avatar-container">
+                        <img src="{% static 'images/cli1.png' %}" alt="Haris S. avatar" class="avatar">
+                    </div>
+                    <div class="details">
+                        <p>Work done by Haris S.</p>
+                        <p>Full-Stack Developer</p>
+                        <p>Apr 7, 2025</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="header-icon"><i class="fa-solid fa-palette"></i> DESIGN & CREATIVE</div>
+                <p>"Ezzan did an amazing job editing my videos fast turnaround, great attention to detail, and very
+                    easy
+                    to work with. He follows directions well and delivers high-quality work consistently. Highly
+                    recommend him!"</p>
+                <div class="rating">
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                </div>
+                <div class="freelancer-info">
+                    <div class="avatar-container">
+                        <img src="{% static 'images/cli2.png' %}" alt="Ezzan S. avatar" class="avatar">
+                    </div>
+                    <div class="details">
+                        <p>Work done by Ezzan S.</p>
+                        <p>Short form and long form video editor needed</p>
+                        <p>Mar 14, 2025</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="testimonial-card">
+                <div class="header-icon"><i class="fa-solid fa-brain"></i> AI SERVICES</div>
+                <p>"Rick is a fantastic AI/ML engineer with specialization in LLMs, delivering end-to-end solutions.
+                    We
+                    had a few concepts when we started the work; ultimately, he delivered a working solution.
+                    Looking
+                    forward to working with him again."</p>
+                <div class="rating">
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                </div>
+                <div class="freelancer-info">
+                    <div class="avatar-container">
+                        <img src="{% static 'images/cli3.png' %}" alt="Richard C. avatar" class="avatar">
+                    </div>
+                    <div class="details">
+                        <p>Work done by Richard C.</p>
+                        <p>LLM/RAG agent system development</p>
+                        <p>Mar 29, 2025</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-column">
+                <h4>For Clients</h4>
+                <ul>
+                    <li><a href="#">How to hire</a></li>
+                    <li><a href="#">Talent Marketplace</a></li>
+                    <li><a href="#">Project Catalog</a></li>
+                    <li><a href="#">Hire an agency</a></li>
+                    <li><a href="#">Enterprise</a></li>
+                    <li><a href="#">Business Plus</a></li>
+                    <li><a href="#">Any Hire</a></li>
+                    <li><a href="#">Contract-to-hire</a></li>
+                    <li><a href="#">Direct Contracts</a></li>
+                    <li><a href="#">Hire worldwide</a></li>
+                    <li><a href="#">Hire in the USA</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>For Talent</h4>
+                <ul>
+                    <li><a href="#">How to find work</a></li>
+                    <li><a href="#">Direct Contracts</a></li>
+                    <li><a href="#">Find freelance jobs worldwide</a></li>
+                    <li><a href="#">Find freelance jobs in the USA</a></li>
+                    <li><a href="#">Win work with ads</a></li>
+                    <li><a href="#">Exclusive resources with Freelancer Plus</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#">Help & support</a></li>
+                    <li><a href="#">Success stories</a></li>
+                    <li><a href="#">SkillConnect reviews</a></li>
+                    <li><a href="#">Resources</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Affiliate programme</a></li>
+                    <li><a href="#">Free Business Tools</a></li>
+                    <li><a href="#">Release notes</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About us</a></li>
+                    <li><a href="#">Leadership</a></li>
+                    <li><a href="#">Investor relations</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Our impact</a></li>
+                    <li><a href="#">Press</a></li>
+                    <li><a href="#">Contact us</a></li>
+                    <li><a href="#">Partners</a></li>
+                    <li><a href="#">Trust, safety & security</a></li>
+                    <li><a href="#">Modern slavery statement</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="social-links">
+                <p>Follow us</p>
+                <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+            </div>
+            <div class="app-links">
+                <p>Mobile app</p>
+                <a href="#"><i class="fa-brands fa-apple"></i></a>
+                <a href="#"><i class="fa-brands fa-android"></i></a>
+            </div>
+        </div>
+        <div class="footer-legal">
+            <p>&copy; 2015 - 2025 SkillConnect® Global Inc. </p>
+            <ul>
+                <li><a href="#">Terms of Service</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">CA Notice at Collection</a></li>
+                <li><a href="#">Cookie Settings</a></li>
+                <li><a href="#">Accessibility</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/index.js' %}"></script>
+</body>
+
+</html>

@@ -1,0 +1,122 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{ client.first_name }}'s Profile</title>
+    <link rel="stylesheet" href="{% static 'css/client_profile.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="page-container">
+        <h2>Profile</h2>
+
+        <!-- Profile Section -->
+        <div class="profile-container">
+            <!-- Left: Info -->
+            <div class="profile-info">
+                <p><strong>Name:</strong> {{ client.first_name }} {{ client.last_name }}</p>
+                <p><strong>Email:</strong> {{ client.email }}</p>
+                <p><strong>Mobile:</strong> {{ client.mobile_number }}</p>
+            </div>
+
+
+            <!-- Profile Picture Upload Form -->
+            <div class="profile-pic">
+                <img src="{% if profile.profile_picture %}{{ profile.profile_picture.url }}{% else %}{% static 'images/default.png' %}{% endif %}"
+                    alt=" " class="pic">
+
+                <form id="profile-pic-form" method="post" enctype="multipart/form-data"
+                    action="{% url 'update_profile_picture' %}">
+                    {% csrf_token %}
+                    <input type="file" id="id_profile_picture" name="profile_picture" accept="image/*" hidden
+                        onchange="document.getElementById('profile-pic-form').submit()">
+                    <label for="id_profile_picture" class="change-pic-label">
+                        <i class="fas fa-camera" style="font-size:40px; color:#333;"></i>
+                    </label>
+
+
+                </form>
+            </div>
+
+
+
+        </div>
+
+        <hr>
+
+        <!-- Read-Only Section -->
+        <div id="readonly-view" class="readonly-block">
+            <p><strong>Bio:</strong> {{ profile.about }}</p>
+            <p><strong>Company:</strong> {{ profile.company_name }}</p>
+            <p><strong>Industry:</strong> {{ profile.industry }}</p>
+            <p><strong>Requirements:</strong> {{ profile.requirements }}</p>
+            <p><strong>Budget:</strong> {{ profile.budget }}</p>
+            <p><strong>Location:</strong> {{ profile.location }}</p>
+
+            <button id="edit-btn" class="update-btn">Update</button>
+            <a href="{% url 'clientHome' %}" class="update-btn" style="text-decoration: none; float: right;">Back</a>
+        </div>
+
+
+
+
+        <!-- Editable Form -->
+        <form id="edit-form" method="post" enctype="multipart/form-data" class="update-form hidden">
+            {% csrf_token %}
+
+
+            <!-- About -->
+            <div class="form-group">
+                <label for="id_about"><strong>Bio:</strong></label><br>
+                {{ form.about }}
+            </div>
+
+
+
+            <!-- Company -->
+            <div class="form-group">
+                <label for="id_company_name"><strong>Company:</strong></label><br>
+                {{ form.company_name }}
+            </div>
+
+            <!-- Industry -->
+            <div class="form-group">
+                <label for="id_industry"><strong>Industry:</strong></label><br>
+                {{ form.industry }}
+            </div>
+
+            <!-- Requirements -->
+            <div class="form-group">
+                <label for="id_requirements"><strong>Requirements:</strong></label><br>
+                {{ form.requirements }}
+            </div>
+
+            <!-- Budget -->
+            <div class="form-group">
+                <label for="id_budget"><strong>Budget:</strong></label><br>
+                {{ form.budget }}
+            </div>
+
+            <!-- Location -->
+            <div class="form-group">
+                <label for="id_location"><strong>Location:</strong></label><br>
+                {{ form.location }}
+            </div>
+
+
+            <!-- Form Buttons -->
+            <div class="form-actions">
+                <button type="submit" class="update-btn">Save</button>
+                <button type="button" id="cancel-btn" class="update-btn cancel-btn">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="{% static 'js/client_profile.js' %}"></script>
+</body>
+
+</html>

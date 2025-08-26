@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillConnect Login</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+
+<body>
+    <a href="/" class="upwork-logo">
+        <div>SkillConnect</div>
+    </a>
+
+    <div class="login-container">
+        <h2>Log in to SkillConnect</h2>
+
+        <!-- FORM START -->
+        <form method="POST" action="{% url 'login' %}">
+            {% csrf_token %}
+
+            <div class="input-group">
+                <label for="email">Email</label>
+                <span class="icon">&#x1F464;</span>
+                <input type="text" id="email" name="email" placeholder="Enter your email" autocomplete="off" required>
+            </div>
+
+            <div class="input-group">
+                <label for="password">Password</label>
+                <span class="icon">&#x1F512;</span>
+                <input type="password" id="password" name="password" placeholder="Enter your password"
+                    autocomplete="new-password" required>
+            </div>
+
+            <button class="continue-btn" type="submit" id="continue-btn">Continue</button>
+        </form>
+        <!-- FORM END -->
+
+        {% for message in messages %}
+        <p style="color:red; text-align:center;">{{ message }}</p>
+        {% endfor %}
+
+        <div class="or-text">or</div>
+        <div class="signup-section">
+            <div class="signup-text">Don't have a SkillConnect account?</div>
+            <button class="signup-btn" id="signup-btn" data-url="{% url 'role' %}">
+                Sign Up
+            </button>
+        </div>
+    </div>
+
+    <script src="{% static 'js/login.js' %}"></script>
+</body>
+
+</html>

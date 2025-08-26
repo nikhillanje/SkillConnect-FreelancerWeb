@@ -1,0 +1,154 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign up to find work you love</title>
+    <link rel="stylesheet" href="{% static 'css/freelancer_Signup.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header class="header">
+        <div class="logo">SkillConnect</div>
+        <div class="hire-talent">
+            <a href="{% url 'client_Signup' %}" class="client-link">Join as a Client</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="form-container">
+            <h2>Sign up As Freelancer</h2>
+
+            <!-- Show general error -->
+            {% if messages %}
+            <ul style="color:red; font-weight:bold;">
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+            <!-- Show field-specific errors -->
+            {% if form_errors %}
+            <ul style="color:red;">
+                {% for field, errors in form_errors.items %}
+                <li><strong>{{ field }}:</strong> {{ errors|join:", " }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+            <form id="signupForm" method="POST" action="{% url 'freelancer_Signup' %}" enctype="multipart/form-data"
+                autocomplete="off">
+                {% csrf_token %}
+
+                <div class="input-group-row">
+                    <div class="input-group">
+                        <label for="firstName">First name</label>
+                        <input type="text" id="firstName" name="first_name" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="lastName">Last name</label>
+                        <input type="text" id="lastName" name="last_name" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <!-- Password -->
+                <div class="input-group password-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Password (8 or more characters)"
+                        required minlength="8" autocomplete="new-password">
+                    <span class="password-toggle" onclick="togglePasswordVisibility()">
+                        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2"
+                            fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </span>
+                </div>
+
+                <!-- Re-enter Password -->
+                <div class="input-group password-group">
+                    <label for="re_enter_password">Re-enter Password</label>
+                    <input type="password" id="re_enter_password" name="re_enter_password"
+                        placeholder="Re-enter Password" required minlength="8" autocomplete="new-password">
+                    <span class="password-toggle" onclick="toggleRePasswordVisibility()">
+                        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2"
+                            fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </span>
+                </div>
+
+
+
+                <!-- Error message -->
+                <p id="password-error" style="color:red; font-size:14px; display:none; margin-top:-8px;">
+                    Passwords do not match!
+                </p>
+
+                <div class="input-group">
+                    <label for="fimage">Upload ID Proof (Max 2 MB)</label>
+                    <input type="file" id="fimage" name="fimage" accept="image/*" required>
+                </div>
+
+                {% if img_obj %}
+                <div class="success-message">
+                    Successfully Uploaded: {{ img_obj.title }}
+                </div>
+                {% endif %}
+
+                <div class="input-group-with-button">
+                    <div class="input-group">
+                        <label for="mobileNumber">Mobile number</label>
+                        <input type="tel" id="mobileNumber" name="mobile_number" required>
+                    </div>
+                    <button type="button" class="verify-btn">Send OTP</button>
+                </div>
+
+                <div id="otp-modal" class="modal">
+                    <div class="modal-content">
+                        <span class="close-btn">&times;</span>
+                        <h3>Verify your mobile number</h3>
+                        <p>A 4-digit code has been sent to <span id="display-mobile-number"></span>.</p>
+                        <div class="input-group">
+                            <label for="otpCode">Enter 4-digit code</label>
+                            <input type="text" id="otpCode" name="otpCode" required maxlength="4">
+                        </div>
+                        <button type="button" class="verify-otp-btn">Verify</button>
+                        <p class="resend-link">Didn't receive a code? <a href="#" id="resend-otp">Resend code</a></p>
+                    </div>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="emailOffers" name="emailOffers" checked>
+                    <label for="emailOffers">Send me helpful emails to find rewarding work and job leads.</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="terms" name="terms" required>
+                    <label for="terms">Yes, I understand and agree to the <a href="#">SkillConnect Terms of Service</a>,
+                        including the <a href="#">User Agreement</a> and <a href="#">Privacy Policy</a>.</label>
+                </div>
+
+                <!-- 🔹 Disabled by default -->
+                <button type="submit" class="create-account-btn" disabled>Create my account</button>
+            </form>
+
+            <div class="login-prompt">
+                Already have an account? <a href="{% url 'login' %}">Log In</a>
+            </div>
+        </div>
+    </main>
+
+    <script src="{% static 'js/freelancer_Signup.js' %}"></script>
+</body>
+
+</html>

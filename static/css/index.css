@@ -1,0 +1,661 @@
+/* General styles and typography */
+:root {
+    --primary-green: #14a800;
+    --dark-grey: #1c1c1c;
+    --light-grey: #f2f2f2;
+    --text-color: #333;
+    --white: #ffffff;
+    --border-color: #e4e4e4;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    line-height: 1.6;
+    color: var(--text-color);
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul {
+    list-style: none;
+}
+
+h1,
+h2,
+h3 {
+    font-weight: 600;
+}
+
+section {
+    padding: 60px 5%;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 5%;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.header .logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary-green);
+}
+
+.header .nav-links {
+    display: flex;
+    gap: 30px;
+    font-size: 16px;
+}
+
+.header .nav-links li a {
+    display: flex;
+    align-items: center;
+}
+
+.header .nav-links i {
+    font-size: 10px;
+    margin-left: 5px;
+}
+
+.header .user-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.header .login-btn {
+    padding: 10px 20px;
+    border: 1px solid var(--primary-green);
+    border-radius: 20px;
+    color: var(--primary-green);
+}
+
+.header .signup-btn {
+    padding: 10px 20px;
+    background-color: var(--primary-green);
+    color: var(--white);
+    border-radius: 20px;
+}
+
+/* Hero Section */
+.hero {
+    background-color: #fafbfb;
+    display: flex;
+    /* make flex the main layout */
+    justify-content: space-between;
+    align-items: center;
+    padding: 100px 5%;
+    text-align: left;
+    /* reset text centering */
+}
+
+.hero-content {
+    flex: 1;
+    max-width: 600px;
+    /* space reserved for text */
+    min-height: 120px;
+    /* prevent height jump */
+}
+
+.hero-content h1 {
+    font-size: 48px;
+    font-weight: bold;
+    color: #333;
+    border-right: 2px solid #333;
+    /* cursor */
+    white-space: nowrap;
+    /* prevent wrapping */
+    overflow: hidden;
+    /* typing effect looks smooth */
+    display: inline-block;
+    padding-right: 5px;
+    animation: blink 0.7s infinite;
+}
+
+.search-container {
+    background-color: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: 30px;
+    padding: 10px;
+    display: inline-flex;
+    flex-direction: column;
+}
+
+.search-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.search-tab {
+    background-color: transparent;
+    border: none;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.search-tab.active {
+    background-color: var(--primary-green);
+    color: var(--white);
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.search-box input {
+    border: none;
+    padding: 10px;
+    flex-grow: 1;
+    font-size: 16px;
+    outline: none;
+}
+
+.search-btn {
+    background-color: var(--primary-green);
+    color: var(--white);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.client-logos {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+.client-logos img {
+    height: 40px;
+    opacity: 0.7;
+}
+
+/* How it Works Section */
+.how-it-works {
+    text-align: center;
+}
+
+.how-it-works h2 {
+    font-size: 36px;
+    margin-bottom: 30px;
+}
+
+.how-it-works .tab-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 40px;
+}
+
+.how-it-works .tab-btn {
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    padding: 10px 25px;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.how-it-works .tab-btn.active {
+    background-color: var(--dark-grey);
+    color: var(--white);
+    border-color: var(--dark-grey);
+}
+
+.how-it-works .tab-content {
+    display: none;
+    justify-content: center;
+    gap: 30px;
+}
+
+.how-it-works .tab-content.active {
+    display: flex;
+}
+
+.how-it-works .step {
+    max-width: 300px;
+    text-align: left;
+}
+
+.how-it-works .step-media {
+    width: 100%;
+    height: 200px;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.how-it-works .step-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.how-it-works .video-placeholder {
+    background-color: #000;
+    color: var(--white);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+    font-size: 18px;
+    position: relative;
+}
+
+.how-it-works .video-placeholder span {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    font-size: 14px;
+}
+
+.how-it-works .video-placeholder i {
+    font-size: 50px;
+    color: var(--white);
+}
+
+/* Explore Pros Section */
+.explore-pros {
+    background-color: var(--light-grey);
+    text-align: center;
+}
+
+.explore-pros h2 {
+    font-size: 36px;
+    margin-bottom: 40px;
+}
+
+.pros-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+}
+
+.pro-card {
+    background-color: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.pro-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.pro-card .icon {
+    font-size: 30px;
+    color: var(--primary-green);
+    margin-bottom: 15px;
+}
+
+.pro-card.highlighted {
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 2px var(--primary-green);
+}
+
+/* Testimonials Section */
+.testimonials {
+    text-align: center;
+}
+
+.testimonials h2 {
+    font-size: 36px;
+    margin-bottom: 40px;
+    font-weight: bold;
+}
+
+.testimonial-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.testimonial-card {
+    background-color: var(--light-grey);
+    padding: 30px;
+    border-radius: 15px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+}
+
+.testimonial-card .header-icon {
+    color: var(--primary-green);
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.testimonial-card p {
+    margin-bottom: 20px;
+    flex-grow: 1;
+}
+
+.testimonial-card .rating {
+    color: var(--primary-green);
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.testimonial-card .freelancer-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.testimonial-card .avatar-container {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.testimonial-card .avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.testimonial-card .details p {
+    margin: 0;
+    line-height: 1.4;
+    font-size: 14px;
+}
+
+/* Footer */
+.footer {
+    background-color: var(--dark-grey);
+    color: var(--white);
+    padding: 60px 5%;
+}
+
+.footer-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.footer-column h4 {
+    margin-bottom: 20px;
+}
+
+.footer-column ul {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.footer-bottom .social-links,
+.footer-bottom .app-links {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.footer-bottom .social-links a i,
+.footer-bottom .app-links a i {
+    font-size: 24px;
+    transition: color 0.2s;
+}
+
+.footer-bottom .social-links a i:hover,
+.footer-bottom .app-links a i:hover {
+    color: var(--primary-green);
+}
+
+.footer-legal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    font-size: 14px;
+}
+
+.footer-legal ul {
+    display: flex;
+    gap: 20px;
+}
+
+
+.hero-container {
+    display: flex;
+    align-items: center;
+    /* vertical center */
+    justify-content: space-between;
+    gap: 40px;
+    padding: 50px;
+}
+
+/* Fix width for typing area */
+.hero-content {
+    flex: 1;
+    max-width: 600px;
+    /* adjust according to longest text */
+    min-height: 120px;
+    /* reserve space so height doesn't shift */
+}
+
+.hero-content h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #333;
+    border-right: 2px solid #333;
+    /* blinking cursor */
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+    padding-right: 5px;
+    animation: blink 0.7s infinite;
+}
+
+.hero-image {
+    flex-shrink: 0;
+    /* prevent shrinking */
+}
+
+.hero-image img {
+    width: 600px;
+    /* fixed image size */
+    height: auto;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo img {
+    height: 50px;
+    /* adjust size */
+    width: 50;
+}
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #333;
+    border-right: 2px solid #333;
+    /* blinking cursor */
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+    padding-right: 5px;
+}
+
+
+@keyframes blink {
+    50% {
+        border-color: transparent;
+    }
+}
+
+h1 {
+    animation: blink 0.7s infinite;
+}
+
+
+.how-it-works-container {
+    width: 90%;
+    max-width: 1200px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.header h2 {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.toggle-buttons {
+    display: flex;
+    border: 1px solid #ddd;
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.toggle-btn {
+    padding: 10px 25px;
+    font-size: 1em;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.toggle-btn.active {
+    background-color: #000;
+    color: #fff;
+}
+
+.content {
+    display: none;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    transition: opacity 0.5s ease-in-out;
+    opacity: 0;
+}
+
+.content.active {
+    display: flex;
+    /* or grid */
+    opacity: 1;
+}
+
+
+
+.cards-container.tab-content {
+    display: none;
+    /* hidden by default */
+    justify-content: center;
+    flex-wrap: wrap;
+    column-gap: 120px;
+    /* horizontal gap between cards */
+    row-gap: 80px;
+    /* vertical gap between rows */
+    margin: 0 auto;
+    /* center properly */
+    margin-left: 170px;
+}
+
+.cards-container.tab-content.active {
+    display: flex;
+    /* show active tab */
+}
+
+
+.card {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 250px;
+    /* set same width for all cards */
+    text-align: center;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card img {
+    width: 250px;
+    /* set same size for all images */
+    height: 250px;
+    object-fit: contain;
+    margin-bottom: 15px;
+}
+
+.card p {
+    background-color: #f9f9b0;
+    /* optional: same as your first card */
+    padding: 10px;
+    border-radius: 8px;
+    width: 100%;
+}
+
+.tab-content {
+    display: none;
+    /* hide by default */
+    justify-content: center;
+    gap: 90px;
+    flex-wrap: wrap;
+    margin-left: 160px;
+}
+
+.tab-content.active {
+    display: flex;
+    /* show only when active */
+}
+
+.skillconnect-description {
+    text-align: justify;
+    /* aligns text evenly on both sides */
+    font-size: 1.1rem;
+    /* increases font size slightly */
+    line-height: 1.6;
+    /* improves readability */
+    color: #333;
+    /* optional: better text contrast */
+}

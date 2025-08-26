@@ -1,0 +1,182 @@
+/* ---------- Global Styles ---------- */
+body {
+    font-family: "Inter", sans-serif;
+    background: linear-gradient(135deg, #f0f4f7, #eaf6ff);
+    padding: 40px 20px;
+    margin: 0;
+    color: #333;
+}
+
+.page-container {
+    max-width: 900px;
+    margin: auto;
+}
+
+/* ---------- Headings ---------- */
+h2 {
+    color: #2a2a2a;
+    font-size: 32px;
+    margin-bottom: 25px;
+    text-align: center;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* ---------- Profile Section ---------- */
+.profile-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, #ffffff, #f9fbfd);
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+    margin-bottom: 35px;
+    transition: transform 0.2s ease;
+}
+
+.profile-container:hover {
+    transform: translateY(-3px);
+}
+
+.profile-info {
+    font-size: 16px;
+    line-height: 1.8;
+    flex: 1;
+}
+
+.profile-info p {
+    margin: 8px 0;
+    font-weight: 500;
+}
+
+.profile-pic {
+    width: 160px;
+    border-radius: 50%;
+    border: 4px solid #14a800;
+    overflow: hidden;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(20, 168, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile-pic img.pic {
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.change-pic-label {
+    margin-top: 10px;
+    display: inline-block;
+    cursor: pointer;
+    color: #3b49df;
+    font-size: 15px;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.change-pic-label:hover {
+    color: #1d2bd1;
+    text-decoration: underline;
+}
+
+/* Divider */
+hr {
+    border: none;
+    border-top: 2px dashed #c9d6df;
+    margin: 35px 0;
+}
+
+/* ---------- Read-Only Block ---------- */
+.readonly-block {
+    background: #ffffff;
+    padding: 25px 30px;
+    border-radius: 14px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    margin-bottom: 25px;
+    line-height: 1.8;
+    border-left: 6px solid #14a800;
+}
+
+.readonly-block p {
+    margin: 10px 0;
+}
+
+/* ---------- Form Styling ---------- */
+.update-form {
+    background: #ffffff;
+    padding: 25px 30px;
+    border-radius: 14px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    border-left: 6px solid #14a800;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 8px;
+    display: inline-block;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: all 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    border-color: #14a800;
+    box-shadow: 0 0 6px rgba(20, 168, 0, 0.3);
+    outline: none;
+}
+
+/* ---------- Buttons ---------- */
+.update-btn {
+    background: linear-gradient(135deg, #14a800, #0e7a00);
+    color: #fff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    margin-top: 15px;
+    font-weight: 600;
+    box-shadow: 0 3px 8px rgba(20, 168, 0, 0.3);
+    transition: all 0.2s ease;
+}
+
+.update-btn:hover {
+    background: linear-gradient(135deg, #0e7a00, #14a800);
+    transform: translateY(-2px);
+}
+
+.cancel-btn {
+    background: linear-gradient(135deg, #999, #777) !important;
+    margin-left: 10px;
+    box-shadow: 0 3px 8px rgba(120, 120, 120, 0.3);
+}
+
+.cancel-btn:hover {
+    background: linear-gradient(135deg, #777, #555) !important;
+}
+
+/* ---------- Utility ---------- */
+.hidden {
+    display: none;
+}
