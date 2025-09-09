@@ -1,0 +1,173 @@
+/* ===== General wrapper ===== */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    margin: 0;
+    padding: 0;
+}
+
+.chat-wrapper {
+    width: 100%;
+    max-width: 600px;
+    margin: 50px auto;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    height: 80vh;
+}
+
+/* ===== Chat Header ===== */
+.chat-header {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background-color: #075e54;
+    color: white;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.chat-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.chat-name {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+/* ===== Chat Messages ===== */
+.chat-box {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    background-color: #e5ddd5;
+    scroll-behavior: smooth;
+    /* smooth scrolling */
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-message {
+    margin-bottom: 15px;
+    max-width: 70%;
+    padding: 10px;
+    border-radius: 10px;
+    position: relative;
+    /* FIX: makes timestamp relative to message */
+    word-wrap: break-word;
+    display: flex;
+    flex-direction: column;
+}
+
+/* My messages (right side) */
+.chat-message.me {
+    background-color: #dcf8c6;
+    align-self: flex-end;
+    border-bottom-right-radius: 0;
+}
+
+/* Their messages (left side) */
+.chat-message.them {
+    background-color: #fff;
+    align-self: flex-start;
+    border-bottom-left-radius: 0;
+}
+
+.chat-message p {
+    margin: 0 0 5px 0;
+}
+
+.chat-message img,
+.chat-message video,
+.chat-message a {
+    display: block;
+    margin-top: 5px;
+    border-radius: 5px;
+    max-width: 100%;
+}
+
+.time {
+    font-size: 11px;
+    color: gray;
+    margin-top: 3px;
+    align-self: flex-end;
+    /* timestamp always aligns bottom-right */
+    position: static;
+    /* no absolute positioning */
+}
+
+/* ===== Chat Input ===== */
+.chat-input {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    background-color: #f0f2f5;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.chat-input input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    margin-right: 10px;
+    outline: none;
+}
+
+/* Hide the actual file input */
+.chat-input input[type="file"] {
+    display: none;
+}
+
+/* File upload icon */
+.file-label {
+    background: #075e54;
+    color: white;
+    border-radius: 50%;
+    padding: 8px;
+    margin-right: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.file-label:hover {
+    background: #0a7c6e;
+}
+
+.chat-input button {
+    background-color: #075e54;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* ===== File Preview (optional) ===== */
+#file-preview {
+    padding: 5px 15px;
+    border-top: 1px solid #ddd;
+    background: #fafafa;
+    font-size: 13px;
+    color: #333;
+}
+
+#file-preview img,
+#file-preview video {
+    max-width: 100px;
+    margin-top: 5px;
+    border-radius: 5px;
+}

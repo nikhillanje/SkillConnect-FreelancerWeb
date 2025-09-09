@@ -1,5 +1,7 @@
 from django.db import models
 from django.utils.safestring import mark_safe 
+from django.db import models
+from django.utils import timezone
 
 class FreelancerLogin(models.Model):
     id = models.AutoField(primary_key=True)
@@ -30,7 +32,7 @@ class ClientLogin(models.Model):
 
 
     def __str__(self):
-        return self.email
+        return f"{self.first_name} {self.last_name}"
     
 
 class Images(models.Model):
@@ -71,5 +73,59 @@ class ClientInfo(models.Model):
 
     def __str__(self):
         return f"Profile of {self.client.first_name}"
+
+class PostedJobs(models.Model):
+    client = models.ForeignKey(ClientLogin, on_delete=models.CASCADE)  
+    title = models.CharField(max_length=200)
+    description = models.TextField(null=True, blank=True)
+    pay_per_hour = models.DecimalField(max_digits=10, decimal_places=2)
+    tech_stack = models.CharField(max_length=300)
+    requirements = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.title} - {self.client.first_name} {self.client.last_name}"
+
+
+class AppliedJobs(models.Model):
+    freelancer = models.ForeignKey(FreelancerLogin, on_delete=models.CASCADE)
+    job = models.ForeignKey(PostedJobs, on_delete=models.CASCADE)
+    applied_at = models.DateTimeField(auto_now_add=True)
+
+    STATUS_CHOICES = [
+        ("Applied", "Applied"),
+        ("Shortlisted", "Shortlisted"),
+        ("Rejected", "Rejected"),
+        ("Hired", "Hired"),
+    ]
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="Applied")
+
+    def __str__(self):
+        return f"{self.freelancer.first_name} applied for {self.job.title}"
+    
+
+
+class Chat(models.Model):
+    SENDER_CHOICES = [
+        ("freelancer", "Freelancer"),
+        ("client", "Client"),
+    ]
+
+    sender_id = models.IntegerField()  
+    sender_type = models.CharField(max_length=20, choices=SENDER_CHOICES)
+    receiver_id = models.IntegerField()
+    receiver_type = models.CharField(max_length=20, choices=SENDER_CHOICES)
+
+    message = models.TextField(blank=True, null=True)
+    file = models.FileField(upload_to="chat_files/", blank=True, null=True)
+    timestamp = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ["timestamp"]  # messages in order
+
+    def __str__(self):
+        return f"{self.sender_type} {self.sender_id} -> {self.receiver_type} {self.receiver_id}"
+
+
 
 

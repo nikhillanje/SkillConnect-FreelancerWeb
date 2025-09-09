@@ -1,0 +1,113 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with {{ receiver_name }}</title>
+    <link rel="stylesheet" href="{% static 'css/chat.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+
+    <a href="javascript:void(0);" onclick="window.history.back();" style="position:absolute; top:15px; right:20px; 
+          background-color:green; color:white; 
+          padding:8px 15px; border-radius:5px; 
+          text-decoration:none; font-weight:bold;">
+        Back
+    </a>
+
+    <div class="chat-wrapper">
+        <!-- Chat Header -->
+        <div class="chat-header">
+            <img src="{{ receiver_profile_pic }}" alt="Profile" class="chat-avatar">
+            <div class="chat-name">{{ receiver_name }}</div>
+        </div>
+
+        <!-- Messages -->
+        <div id="chat-box" class="chat-box">
+            {% for msg in messages %}
+            <div class="chat-message {% if msg.sender_type == user_type %}me{% else %}them{% endif %}">
+                {% if msg.message %}<p>{{ msg.message }}</p>{% endif %}
+                {% if msg.file %}
+                {% if ".mp4" in msg.file.url %}
+                <video controls width="200">
+                    <source src="{{ msg.file.url }}">
+                </video>
+                {% elif msg.file.url|lower|endswith:".jpg" or msg.file.url|lower|endswith:".png" or
+                msg.file.url|lower|endswith:".jpeg" %}
+                <img src="{{ msg.file.url }}" width="200">
+                {% else %}
+                <a href="{{ msg.file.url }}" target="_blank">{{ msg.file.name }}</a>
+                {% endif %}
+                {% endif %}
+                <span class="time">{{ msg.timestamp|date:"H:i" }}</span>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Input Box -->
+        <form id="chat-form" enctype="multipart/form-data" class="chat-input">
+            {% csrf_token %}
+            <input type="hidden" name="receiver_type" value="{{ receiver_type }}">
+            <input type="hidden" name="receiver_id" value="{{ receiver_id }}">
+            <input type="text" name="message" placeholder="Type a message..." required>
+            <input type="file" name="file" id="file-input">
+            <button type="submit">Send</button>
+        </form>
+    </div>
+
+    <script>
+        function fetchMessages() {
+            $.get("{% url 'fetch_chat_ajax' receiver_type receiver_id %}", function (data) {
+                $('#chat-box').html('');
+                data.messages.forEach(function (msg) {
+                    let className = msg.sender_type === "{{ user_type }}" ? 'chat-message me' : 'chat-message them';
+                    let fileHtml = '';
+                    if (msg.file) {
+                        if (msg.file.endsWith(".mp4")) {
+                            fileHtml = `<video controls width="200"><source src="${msg.file}"></video>`;
+                        } else if (msg.file.match(/\.(jpg|jpeg|png)$/i)) {
+                            fileHtml = `<img src="${msg.file}" width="200">`;
+                        } else {
+                            fileHtml = `<a href="${msg.file}" target="_blank">${msg.file.split('/').pop()}</a>`;
+                        }
+                    }
+                    $('#chat-box').append(`
+                        <div class="${className}">
+                            ${msg.message ? '<p>' + msg.message + '</p>' : ''}
+                            ${fileHtml}
+                            <span class="time">${msg.timestamp.split(' ')[1]}</span>
+                        </div>
+                    `);
+                });
+                $('#chat-box').scrollTop($('#chat-box')[0].scrollHeight);
+            });
+        }
+
+        $(document).ready(function () {
+            fetchMessages();
+            setInterval(fetchMessages, 3000); // refresh every 3 sec
+
+            $('#chat-form').submit(function (e) {
+                e.preventDefault();
+                var formData = new FormData(this);
+                $.ajax({
+                    url: "{% url 'send_chat_ajax' %}",
+                    type: "POST",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function () {
+                        $('#chat-form')[0].reset();
+                        fetchMessages();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

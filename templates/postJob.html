@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Post Job</title>
+    <link rel="stylesheet" href="{% static 'css/postJob.css' %}">
+</head>
+
+<body>
+    <!-- Back Button -->
+    <a href="{% url 'clientHome' %}" class="back-btn">Back</a>
+    <div class="container">
+
+
+        <h2>Post a Job</h2>
+        <form action="{% url 'postJob' client.id %}" method="post" class="job-form">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="title">Job Title</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description / Location</label>
+                <textarea id="description" name="description" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="pay_per_hour">Pay per Hour</label>
+                <input type="number" id="pay_per_hour" step="0.01" name="pay_per_hour" required>
+            </div>
+
+            <div class="form-group">
+                <label for="tech_stack">Tech Stack</label>
+                <input type="text" id="tech_stack" name="tech_stack" required>
+            </div>
+
+            <div class="form-group">
+                <label for="requirements">Requirements</label>
+                <textarea id="requirements" name="requirements" required></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">Post Job</button>
+        </form>
+    </div>
+</body>
+
+</html>

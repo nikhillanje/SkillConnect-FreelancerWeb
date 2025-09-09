@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{ client.first_name }}'s Profile</title>
+    <link rel="stylesheet" href="{% static 'css/client_profile.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="page-container">
+        <h2>Client Profile</h2>
+
+        <div class="profile-container">
+            <!-- Left: Info -->
+            <div class="profile-info">
+                <p><strong>Name:</strong> {{ client.first_name }} {{ client.last_name }}</p>
+                <p><strong>Email:</strong> {{ client.email }}</p>
+                <p><strong>Mobile:</strong> {{ client.mobile_number }}</p>
+                <a href="{% url 'chat_view' 'client' client.id %}" class="btn-message">Messages</a>
+            </div>
+
+            <!-- Profile Picture -->
+            <div class="profile-pic">
+                <img src="{% if profile.profile_picture %}{{ profile.profile_picture.url }}{% else %}{% static 'images/default.png' %}{% endif %}"
+                    alt="Profile Picture" class="pic">
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- Read-Only Profile Details -->
+        <div class="readonly-block">
+            <p><strong>Bio:</strong> {{ profile.about }}</p>
+            <p><strong>Company:</strong> {{ profile.company_name }}</p>
+            <p><strong>Industry:</strong> {{ profile.industry }}</p>
+            <p><strong>Requirements:</strong> {{ profile.requirements }}</p>
+            <p><strong>Budget:</strong> {{ profile.budget }}</p>
+            <p><strong>Location:</strong> {{ profile.location }}</p>
+
+            <a href="{% url 'freelancerHome' %}" class="update-btn"
+                style="text-decoration: none; float: right;">Back</a>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -7,35 +7,102 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SkillConnect - Home</title>
     <link rel="stylesheet" href="{% static 'css/client_home.css' %}">
-</head>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-<body>
     <header>
-        <nav class="navbar">
-            <div class="logo">SkillConnect</div>
-            <p style="width: 110px; margin-left: auto;">{{ client.first_name }} {{ client.last_name }}</p>
+        <nav class="navbar"
+            style="display:flex; align-items:center; padding:15px 30px; background-color:#fff; border-bottom:1px solid #e5e5e5; gap:10px;">
 
-            <div class="profile-icons">
-                <a href="{% url 'client_profile' client_id %}">
-                    {% if client_info.profile_picture %}
-                    <img src="{{ client_info.profile_picture.url }}" alt="Client" class="user-icon">
-                    {% else %}
-                    <img src="{% static 'images/user-icon.png' %}" alt="Client" class="user-icon">
-                    {% endif %}
+            <!-- Logo -->
+            <div class="logo" style="font-weight:bold; font-size:24px; color:#14a800;">
+                SkillConnect
+            </div>
+
+            <!-- Buttons Group -->
+            <div style="display:flex; align-items:center; gap:10px; margin-left:auto;">
+
+                <a href="{% url 'client_chat_list' %}" style="background-color:#14a800;
+              color:white; 
+              padding:8px 16px; 
+              border-radius:15px; 
+              font-size:14px; 
+              font-weight:bold; 
+              text-decoration:none; 
+              display:flex; align-items:center; gap:6px;">
+                    <span class="material-icons" style="font-size:18px;">chat</span>
+                    Messages
                 </a>
+
+                <a href="{% url 'client_posted_jobs' %}" style="background-color:#14a800;
+              color:white; 
+              padding:8px 16px; 
+              border-radius:15px; 
+              font-size:14px; 
+              font-weight:bold; 
+              text-decoration:none;
+              display:flex; align-items:center; gap:6px;">
+                    <span class="material-icons" style="font-size:18px;">work_outline</span>
+                    Your Post Job
+                </a>
+
+                <a href="{% url 'postJob' client.id %}" style="background-color:#14a800;
+              color:white; 
+              padding:8px 16px; 
+              border-radius:15px; 
+              font-size:14px; 
+              font-weight:bold; 
+              text-decoration:none;
+              display:flex; align-items:center; gap:6px;">
+                    <span class="material-icons" style="font-size:18px;">add_circle_outline</span>
+                    Post Job
+                </a>
+
+                <a href="{% url 'client_applied_jobs' %}" style="background-color:#14a800;
+              color:white; 
+              padding:8px 16px; 
+              border-radius:15px; 
+              font-size:14px; 
+              font-weight:bold; 
+              text-decoration:none;
+              display:flex; align-items:center; gap:6px;">
+                    <span class="material-icons" style="font-size:18px;">assignment_turned_in</span>
+                    Freelancer's Responses
+                </a>
+
+                <!-- Name + Profile Group -->
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <p style="margin:0; font-weight:500; font-size:15px;">
+                        {{ client.first_name }} {{ client.last_name }}
+                    </p>
+                    <div class="profile-icons">
+                        <a href="{% url 'client_profile' client_id %}">
+                            {% if client_info.profile_picture %}
+                            <img src="{{ client_info.profile_picture.url }}" alt="Client" class="user-icon">
+                            {% else %}
+                            <img src="{% static 'images/user-icon.png' %}" alt="Client" class="user-icon">
+                            {% endif %}
+                        </a>
+                    </div>
+                </div>
             </div>
         </nav>
     </header>
+
+
 
     <main class="container">
         <div class="main-content">
             <div class="search-jobs-section">
                 <div class="search-container">
-                    <input type="text" placeholder="Search for jobs">
+                    <h3>Recruiters Dashboard</h3>
                 </div>
-                <h3>Freelancer's Responses</h3>
             </div>
         </div>
+
+
+
+
+
 
         <!-- Sidebar -->
         <aside class="sidebar">
@@ -73,6 +140,6 @@
             </div>
         </aside>
     </main>
-</body>
+    </body>
 
 </html>

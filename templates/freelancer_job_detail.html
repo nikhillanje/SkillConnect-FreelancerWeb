@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{ job.title }} - Details</title>
+    <link rel="stylesheet" href="{% static 'css/freelancer_job_detail.css' %}">
+</head>
+
+<body>
+    <a href="{% url 'freelancerHome' %}" style="position:absolute; top:15px; right:20px; 
+          background-color:green; color:white; 
+          padding:8px 15px; border-radius:5px; 
+          text-decoration:none; font-weight:bold;">
+        Back
+    </a>
+    <div class="job-detail-container">
+        <h1>{{ job.title }}</h1>
+
+        <div class="client-info">
+            {% if client_info.profile_picture %}
+            <img src="{{ client_info.profile_picture.url }}" alt="{{ job.client.first_name }}" class="client-pic">
+            {% else %}
+            <img src="{% static 'images/user-icon.png' %}" alt="{{ job.client.first_name }}" class="client-pic">
+            {% endif %}
+            <p><strong>Recruiter:</strong> {{ job.client.first_name }} {{ job.client.last_name }}</p>
+            <p><strong>Company:</strong> {{ client_info.company_name }}</p>
+        </div>
+
+        <div class="job-full-info">
+            <p><strong>Description:</strong> {{ job.description }}</p>
+            <p><strong>Pay per hour:</strong> ₹{{ job.pay_per_hour }}</p>
+            <p><strong>Tech Stack:</strong> {{ job.tech_stack }}</p>
+            <p><strong>Requirements:</strong> {{ job.requirements }}</p>
+            <p><strong>Posted on:</strong> {{ job.created_at|date:"d M Y H:i" }}</p>
+        </div>
+
+        <div class="apply-button-container">
+            {% if already_applied %}
+            <button class="already-applied" disabled>Already Applied</button>
+            {% else %}
+            <form action="{% url 'apply_job' job.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="interested-button">I am Interested</button>
+            </form>
+            {% endif %}
+        </div>
+
+    </div>
+</body>
+
+</html>

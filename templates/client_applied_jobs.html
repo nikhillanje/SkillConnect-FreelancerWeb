@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Applied Freelancers - SkillConnect</title>
+    <link rel="stylesheet" href="{% static 'css/client_applied_jobs.css' %}">
+</head>
+
+<body>
+    <a href="{% url 'clientHome' %}" style="position:absolute; top:15px; right:20px; 
+          background-color:green; color:white; 
+          padding:8px 15px; border-radius:5px; 
+          text-decoration:none; font-weight:bold;">
+        Back
+    </a>
+    <div class="container">
+        <h1>Freelancers Applied to Your Jobs</h1>
+
+        <table class="applied-jobs-table">
+            <thead>
+                <tr>
+                    <th>Job Title</th>
+                    <th>Freelancer Name</th>
+                    <th>Applied At</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for applied in applied_jobs %}
+                <tr>
+                    <td>{{ applied.job.title }}</td>
+                    <td>
+                        <a href="{% url 'freelancer_profile_view' applied.freelancer.id %}"
+                            style="text-decoration: none; color: black; font-weight: normal;">
+                            {{ applied.freelancer.first_name }} {{ applied.freelancer.last_name }}
+                        </a>
+
+                    </td>
+
+                    <td>{{ applied.applied_at|date:"d M Y H:i" }}</td>
+                    <td>
+                        <span class="status {{ applied.status|lower }}">{{ applied.status }}</span>
+                    </td>
+                    <td>
+                        {% if applied.status == "Pending" %}
+                        <a href="{% url 'update_application_status' applied.id 'Hired' %}"
+                            class="btn btn-hired">Hired</a>
+                        <a href="{% url 'update_application_status' applied.id 'Rejected' %}"
+                            class="btn btn-rejected">Rejected</a>
+                        {% else %}
+                        <span class="status {{ applied.status|lower }}">{{ applied.status }}</span>
+                        {% endif %}
+
+
+                        <a href="{% url 'client_chat_view' applied.freelancer.id %}"
+                            style="padding:6px 12px; margin-left:50px; background-color:#1d72b8; color:white; text-decoration:none; border-radius:4px; font-size:14px;">
+                            Message
+                        </a>
+
+
+
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="no-data">No freelancers have applied yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

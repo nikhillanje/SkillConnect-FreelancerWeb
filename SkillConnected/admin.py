@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import FreelancerLogin, ClientLogin, Images , FreelancerInfo,ClientInfo
+from .models import FreelancerLogin, ClientLogin, Images , FreelancerInfo,ClientInfo,PostedJobs,AppliedJobs
 from django.utils.html import format_html
 
 # Freelancer admin with image preview
@@ -35,3 +35,25 @@ class FreelancerInfoAdmin(admin.ModelAdmin):
 @admin.register(ClientInfo)
 class ClientInfoAdmin(admin.ModelAdmin):
     list_display = ('id', 'client', 'company_name', 'location', 'industry')
+
+
+@admin.register(PostedJobs)
+class PostedJobsAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title', 'description','client', 'pay_per_hour', 'tech_stack', 'created_at')
+    list_filter = ('client', 'created_at')  # optional: filters in admin sidebar
+    search_fields = ('title', 'tech_stack','description', 'requirements', 'client__first_name', 'client__last_name')
+    ordering = ('-created_at',)  # newest jobs first
+
+
+
+@admin.register(AppliedJobs)
+class AppliedJobsAdmin(admin.ModelAdmin):
+    list_display = ('id', 'freelancer', 'job', 'status', 'applied_at')
+    list_filter = ('status', 'applied_at', 'job')
+    search_fields = (
+        'freelancer__first_name',
+        'freelancer__last_name',
+        'freelancer__email',
+        'job__title',
+    )
+    ordering = ('-applied_at',)

@@ -1,5 +1,5 @@
 from django import forms
-from .models import FreelancerLogin,ClientLogin,FreelancerInfo,ClientInfo
+from .models import FreelancerLogin,ClientLogin,FreelancerInfo,ClientInfo,PostedJobs,AppliedJobs
 
 class FreelancerForm(forms.ModelForm):
     re_enter_password = forms.CharField(
@@ -95,3 +95,19 @@ class ClientInfoForm(forms.ModelForm):
             'about': forms.Textarea(attrs={'class': 'form-control'}),
         }
 
+class PostedJobsForm(forms.ModelForm):
+    class Meta:
+        model = PostedJobs
+        fields = ['title', 'description', 'pay_per_hour', 'tech_stack', 'requirements']
+
+class AppliedJobsForm(forms.ModelForm):
+    class Meta:
+        model = AppliedJobs
+        fields = ['freelancer', 'job', 'status']  # status is already in the model
+        widgets = {
+            'status': forms.Select(choices=[
+                ('Pending', 'Pending'),
+                ('Approved', 'Approved'),
+                ('Rejected', 'Rejected'),
+            ])
+        }

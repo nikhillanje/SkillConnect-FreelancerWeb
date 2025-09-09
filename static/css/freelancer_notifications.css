@@ -1,0 +1,51 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f6fa;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #2f3640;
+}
+
+.notification-card {
+    background-color: #ffffff;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-left: 5px solid #27ae60;
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.notification-card h2 {
+    margin-top: 0;
+    color: #27ae60;
+}
+
+.notification-card p {
+    margin: 10px 0;
+    color: #2d3436;
+}
+
+.btn-message {
+    display: inline-block;
+    background-color: #0984e3;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-message:hover {
+    background-color: #74b9ff;
+}

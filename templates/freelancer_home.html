@@ -7,75 +7,179 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SkillConnect - Home</title>
     <link rel="stylesheet" href="{% static 'css/freelancer_home.css' %}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
 <body>
     <header>
-        <nav class="navbar">
-            <div class="logo">SkillConnect</div>
-            <p style="width: 150px; margin-left: auto;">{{ freelancer.first_name }} {{ freelancer.last_name }}</p>
-            <div class="profile-icons">
+        <nav class="navbar" style="display:flex; align-items:center; padding:10px 30px; background-color:#fff;">
+            <div class="logo" style="font-weight:bold; font-size:20px;">SkillConnect</div>
 
+            <!-- Search & Sort Form -->
+            <form method="get" style="flex:1; display:flex; justify-content:center; gap:10px; align-items:center;">
+                <input type="text" name="search" placeholder="Search for jobs" value="{{ search_query|default:'' }}"
+                    style="padding:6px 12px; border-radius:20px 0 0 20px; border:1px solid #ccc; width:250px; outline:none;">
+                <button type="submit" class="search-btn"
+                    style="padding:6px 12px; border:none; background-color:#14a800; border-radius:0 20px 20px 0; cursor:pointer; display:flex; align-items:center; justify-content:center;">
+                    <span class="material-icons" style="color:white; font-size:20px;">search</span>
+                </button>
+
+                <!-- Sort by Pay -->
+                <div class="sort-pay" style="display:flex; align-items:center; gap:5px;">
+                    <label for="paySort" style="font-weight:bold;">Pay:</label>
+                    <select name="paySort" id="paySort"
+                        style="padding:5px 10px; border-radius:5px; border:1px solid #ccc;">
+                        <option value="">Select</option>
+                        <option value="low-high">Low to High</option>
+                        <option value="high-low">High to Low</option>
+                    </select>
+                </div>
+
+                <!-- Sort by Tech Stack -->
+                <div class="sort-tech" style="display:flex; align-items:center; gap:5px;">
+                    <label for="techSort" style="font-weight:bold;">Tech Stack:</label>
+                    <select name="techSort" id="techSort"
+                        style="padding:5px 10px; border-radius:5px; border:1px solid #ccc;">
+                        <option value="">Select</option>
+                        <option value="frontend developer">Frontend Developer</option>
+                        <option value="backend developer">Backend Developer</option>
+                        <option value="fullstack">Full Stack</option>
+                        <option value="devops">DevOps</option>
+                        <option value="django">Django</option>
+                        <option value="data scientist">Data Scientist</option>
+                    </select>
+                </div>
+            </form>
+
+            <!-- Messages & Notifications -->
+            <a href="{% url 'freelancer_chat_list' %}"
+                style="background-color:#14a800; color:white; padding:8px 16px; border-radius:15px; font-size:14px; font-weight:bold; text-decoration:none; margin-left:15px; display:flex; align-items:center;">
+                <span class="material-icons" style="margin-right:5px;">message</span>Messages
+            </a>
+
+            <a href="{% url 'freelancer_notifications' %}"
+                style="background-color:#14a800; color:white; padding:8px 16px; border-radius:15px; font-size:14px; font-weight:bold; text-decoration:none; margin-left:10px; display:flex; align-items:center;">
+                <span class="material-icons" style="margin-right:5px;">notifications</span>Client's Responses
+            </a>
+
+            <p style="margin-left:15px; font-weight:bold;">{{ freelancer.first_name }} {{ freelancer.last_name }}</p>
+
+            <div class="profile-icons" style="margin-left:10px;">
                 <a href="{% url 'freelancer_profile' user_id %}">
-
                     {% if freelancer_info.profile_picture %}
-                    <img src="{{ freelancer_info.profile_picture.url }}" alt="User" class="user-icon">
+                    <img src="{{ freelancer_info.profile_picture.url }}" alt="User" class="user-icon"
+                        style="width:40px; height:40px; border-radius:50%;">
                     {% else %}
-                    <img src="{% static 'images/user-icon.png' %}" alt="User" class="user-icon">
+                    <img src="{% static 'images/user-icon.png' %}" alt="User" class="user-icon"
+                        style="width:40px; height:40px; border-radius:50%;">
                     {% endif %}
                 </a>
-
             </div>
         </nav>
     </header>
 
-
-
-    <main class="container">
+    <main class="container" style="width: 1400px; margin-left: 58px;">
         <div class="main-content">
-            <div class="search-jobs-section">
-                <div class="search-container">
-                    <input type="text" placeholder="Search for jobs">
+            <div class="jobs-feed">
+                {% for item in jobs_with_client_info %}
+                <div class="job-card" data-pay="{{ item.job.pay }}" data-tech="{{ item.job.tech_stack }}">
+                    <div class="job-client-header">
+                        <div class="client-info-text">
+                            <p class="client-name"><strong>Recruiter:</strong> {{ item.client_full_name }}</p>
+                            {% if item.client_full_name %}
+                            <p class="client-name"><strong>Company:</strong> {{ item.client_name }}</p>
+                            {% endif %}
+                        </div>
+                        <a href="{% url 'client_profile_view' item.client.id %}">
+                            {% if item.profile_picture %}
+                            <img src="{{ item.profile_picture.url }}" alt="{{ item.client_full_name }}"
+                                class="client-pic">
+                            {% else %}
+                            <img src="{% static 'images/user-icon.png' %}" alt="Client" class="client-pic">
+                            {% endif %}
+                        </a>
+                    </div>
+
+                    <div class="job-details">
+                        <p><strong>Job Title:</strong> {{ item.job.title }}</p>
+                        <p><strong>Tech Stack:</strong> {{ item.job.tech_stack }}</p>
+
+                    </div>
+
+                    <a href="{% url 'freelancer_job_detail' item.job.id %}"
+                        style="display:inline-block; padding:8px 15px; background-color:#28a745; color:white; text-decoration:none; border-radius:5px; font-size:16px;"
+                        onmouseover="this.style.backgroundColor='#218838';"
+                        onmouseout="this.style.backgroundColor='#28a745';">
+                        <span class="material-icons"
+                            style="vertical-align:middle; font-size:18px; margin-right:5px;">info</span>
+                        More Info
+                    </a>
                 </div>
-                <h3>Jobs you might like</h3>
+                {% empty %}
+                <p>No jobs posted yet.</p>
+                {% endfor %}
             </div>
         </div>
-
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="profile-card">
-                {% if freelancer_info.profile_picture %}
-                <img src="{{ freelancer_info.profile_picture.url }}" alt="Freelancer" class="profile-picture">
-                {% else %}
-                <img src="{% static 'images/user-icon.png' %}" alt="Freelancer" class="profile-picture">
-                {% endif %}
-                <h1>{{ freelancer.first_name }} {{ freelancer.last_name }}</h1>
-                <h4>Bio</h4>
-                <p>{{ freelancer_info.bio }}</p>
-                <h4>Skills</h4>
-                <p>{{ freelancer_info.skills }}</p>
-                <h4>Education</h4>
-                <p>{{ freelancer_info.education }}</p>
-                <h4>Experiance</h4>
-                <p>{{ freelancer_info.experience }}</p>
-                <h4>Address</h4>
-                <p>{{ freelancer_info.address }}</p>
-                <h4>Language</h4>
-                <p>{{ freelancer_info.language }}</p>
-                <br>
-
-                <div class="logout-section">
-                    <form action="{% url 'logout' %}" method="post">
-                        {% csrf_token %}
-                        <button type="submit"
-                            style="background-color:red; color:white; border:none; padding:10px 15px; border-radius:6px; cursor:pointer; font-size:14px; font-weight:bold;">
-                            Logout
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </aside>
     </main>
+
+    <script>
+        const currentPaySort = "{{ pay_sort|default:'' }}";
+        const currentTechSort = "{{ tech_sort|default:'' }}";
+
+        const paySelect = document.getElementById("paySort");
+        const techSelect = document.getElementById("techSort");
+        const searchInput = document.querySelector('input[name="search"]');
+        const jobCards = Array.from(document.querySelectorAll('.job-card'));
+
+        // Set selected option dynamically
+        if (currentPaySort) {
+            for (let option of paySelect.options) {
+                if (option.value === currentPaySort) {
+                    option.selected = true;
+                    break;
+                }
+            }
+        }
+        if (currentTechSort) {
+            for (let option of techSelect.options) {
+                if (option.value === currentTechSort) {
+                    option.selected = true;
+                    break;
+                }
+            }
+        }
+
+        function filterJobs() {
+            const searchText = searchInput.value.toLowerCase();
+            const payOrder = paySelect.value;
+            const techOrder = techSelect.value.toLowerCase(); // normalize
+
+            let filtered = jobCards.filter(card => {
+                const title = card.querySelector('.job-details p').textContent.toLowerCase();
+                const tech = card.dataset.tech.toLowerCase() || ''; // normalize
+                // Use includes for partial match
+                return title.includes(searchText) && (!techOrder || tech.includes(techOrder));
+            });
+
+            if (payOrder) {
+                filtered.sort((a, b) => {
+                    const payA = parseFloat(a.dataset.pay || 0);
+                    const payB = parseFloat(b.dataset.pay || 0);
+                    return payOrder === 'low-high' ? payA - payB : payB - payA;
+                });
+            }
+
+            jobCards.forEach(card => card.style.display = 'none');
+            filtered.forEach(card => card.style.display = 'block');
+        }
+
+        searchInput.addEventListener('input', filterJobs);
+        paySelect.addEventListener('change', filterJobs);
+        techSelect.addEventListener('change', filterJobs);
+
+        filterJobs(); // Apply filter on page load
+    </script>
+
 </body>
 
 </html>

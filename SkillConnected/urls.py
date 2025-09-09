@@ -7,9 +7,6 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('freelancer_Signup/', views.freelancer_Signup, name='freelancer_Signup'),
     path('client_Signup/', views.client_Signup, name='client_Signup'),
-   path("send-otp/", views.send_otp, name="send_otp"),
-    path("verify-otp/", views.verify_otp, name="verify_otp"),
-
 ]
 
 if settings.DEBUG:

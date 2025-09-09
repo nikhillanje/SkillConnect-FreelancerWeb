@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages</title>
+    <link rel="stylesheet" href="{% static 'css/client_chat_list.css' %}">
+</head>
+
+<body>
+    <a href="{% url 'clientHome' %}" style="position:absolute; top:15px; right:20px; 
+          background-color:green; color:white; 
+          padding:8px 15px; border-radius:5px; 
+          text-decoration:none; font-weight:bold;">
+        Back
+    </a>
+
+    <div class="chat-list-container">
+        <h2>Your Chats</h2>
+        {% if freelancers %}
+        <ul class="chat-list">
+            {% for freelancer in freelancers %}
+            <li class="chat-item">
+                <a href="{% url 'client_chat_view' freelancer.id %}">
+                    <img src="{% if freelancer.freelancerinfo.profile_picture %}{{ freelancer.freelancerinfo.profile_picture.url }}{% else %}{% static 'images/default_profile.png' %}{% endif %}"
+                        alt="Profile" class="avatar">
+                    <span class="name">{{ freelancer.first_name }} {{ freelancer.last_name }}</span>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No chats yet. Start a conversation!</p>
+        {% endif %}
+    </div>
+</body>
+
+</html>

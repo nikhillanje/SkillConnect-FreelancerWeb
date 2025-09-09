@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{ freelancer.first_name }} {{ freelancer.last_name }} - Profile</title>
+    <link rel="stylesheet" href="{% static 'css/freelancer_profile.css' %}">
+</head>
+
+<body>
+    <div class="page-container">
+        <h2>Freelancer Profile</h2>
+
+        <!-- Profile Section -->
+        <div class="profile-container">
+            <div class="profile-info">
+                <p><strong>Name:</strong> {{ freelancer.first_name }} {{ freelancer.last_name }}</p>
+                <p><strong>Email:</strong> {{ freelancer.email }}</p>
+                <p><strong>Mobile:</strong> {{ freelancer.mobile_number }}</p>
+            </div>
+
+            <div class="profile-pic">
+                <img src="{% if profile.profile_picture %}{{ profile.profile_picture.url }}{% else %}{% static 'images/default.png' %}{% endif %}"
+                    alt="Profile Picture" class="pic">
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="readonly-block">
+            <p><strong>Bio:</strong> {{ profile.bio }}</p>
+            <p><strong>Skills:</strong> {{ profile.skills }}</p>
+            <p><strong>Experience:</strong> {{ profile.experience }}</p>
+            <p><strong>Education:</strong> {{ profile.education }}</p>
+            <p><strong>Language:</strong> {{ profile.language }}</p>
+            <p><strong>Address:</strong> {{ profile.address }}</p>
+
+            <p><strong>Resume:</strong>
+                {% if profile.resume %}
+                <a href="{{ profile.resume.url }}" target="_blank" style="color:blue; text-decoration:underline;">
+                    View Resume
+                </a>
+                {% else %}
+                <span style="color:red;">No resume uploaded</span>
+                {% endif %}
+            </p>
+
+            <a href="{% url 'client_applied_jobs' %}" class="update-btn"
+                style="text-decoration:none; float:right;">Back</a>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Congratulations - SkillConnect</title>
+    <link rel="stylesheet" href="{% static 'css/freelancer_notifications.css' %}">
+</head>
+
+<body>
+    <a href="{% url 'freelancerHome' %}" style="position:absolute; top:15px; right:20px; 
+          background-color:green; color:white; 
+          padding:8px 15px; border-radius:5px; 
+          text-decoration:none; font-weight:bold;">
+        Back
+    </a>
+    <div class="container">
+
+
+        {% for applied in hired_jobs %}
+        <h1>🎉 Congratulations! 🎉</h1>
+        <p>Here are the clients who hired you recently:</p>
+        <div class="notification-card">
+            <h2>{{ applied.job.client.first_name }} {{ applied.job.client.last_name }} hired you!</h2>
+            <p><strong>Job:</strong> {{ applied.job.title }}</p>
+            <p>We are excited to inform you that {{ applied.job.client.first_name }} has chosen you for this project.
+                Make sure to get in touch and clarify the requirements.</p>
+            <a href="{% url 'chat_view' 'client' applied.job.client.id %}" class="btn-message">Message Client</a>
+        </div>
+        {% empty %}
+        <div style="display: flex; justify-content: center; align-items: center; height: 50vh;">
+            <h4>No new notifications.</h4>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+
+</html>

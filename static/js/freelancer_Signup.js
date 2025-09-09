@@ -10,70 +10,57 @@ document.addEventListener("DOMContentLoaded", function () {
         const rePasswordInput = document.getElementById('re_enter_password');
         rePasswordInput.type = rePasswordInput.type === 'password' ? 'text' : 'password';
     }
-
-    // 🔹 Send OTP
+    // 🔹 Send OTP (no alert, just open modal)
     async function handleMobileVerification() {
         const mobileNumber = document.getElementById('mobileNumber').value.trim();
-        if (mobileNumber.length !== 10) {
-            alert("Enter a valid 10-digit mobile number.");
-            return;
+        if (mobileNumber.length !== 10 || isNaN(mobileNumber)) {
+            return; // silently ignore
         }
 
         try {
             const response = await fetch("/send-otp/", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ phone: mobileNumber })
             });
 
             const data = await response.json();
-            alert(data.message);
-
             if (data.success) {
                 document.getElementById('otp-modal').style.display = 'flex';
                 document.getElementById('display-mobile-number').textContent = mobileNumber;
             }
-
         } catch (err) {
-            alert("Error sending OTP: " + err);
+            console.error("Error sending OTP:", err);
         }
     }
 
-    // 🔹 Verify OTP
+    // 🔹 Verify OTP (no alert, just enable button)
     async function handleOtpVerification() {
         const mobileNumber = document.getElementById('mobileNumber').value.trim();
         const otpCode = document.getElementById('otpCode').value.trim();
 
-        if (otpCode.length !== 4) {
-            alert("Enter a valid 4-digit OTP.");
-            return;
+        if (otpCode.length !== 4 || isNaN(otpCode)) {
+            return; // silently ignore
         }
 
         try {
             const response = await fetch("/verify-otp/", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ phone: mobileNumber, otp: otpCode })
             });
 
             const data = await response.json();
-            alert(data.message);
-
             if (data.success) {
                 document.getElementById('otp-modal').style.display = 'none';
                 document.querySelector('.create-account-btn').disabled = false;
             }
-
         } catch (err) {
-            alert("Error verifying OTP: " + err);
+            console.error("Error verifying OTP:", err);
         }
     }
+
+
 
     // 🔹 Close OTP modal
     document.querySelector('.close-btn').addEventListener('click', () => {
@@ -83,6 +70,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // 🔹 Attach handlers
     document.querySelector('.verify-btn').addEventListener('click', handleMobileVerification);
     document.querySelector('.verify-otp-btn').addEventListener('click', handleOtpVerification);
+
+
 
     // 🔹 Password match + validation before form submit
     document.getElementById('signupForm').addEventListener('submit', function (event) {
