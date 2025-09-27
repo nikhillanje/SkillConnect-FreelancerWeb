@@ -8,78 +8,87 @@
     <title>SkillConnect - Home</title>
     <link rel="stylesheet" href="{% static 'css/client_home.css' %}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        /* Hover effect for recruiter cards */
+        .recruiter-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 160px;
+            cursor: pointer;
+        }
 
+        .recruiter-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Responsive Grid */
+        .recruiter-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .recruiter-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .recruiter-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
     <header>
         <nav class="navbar"
             style="display:flex; align-items:center; padding:15px 30px; background-color:#fff; border-bottom:1px solid #e5e5e5; gap:10px;">
-
-            <!-- Logo -->
-            <div class="logo" style="font-weight:bold; font-size:24px; color:#14a800;">
-                SkillConnect
-            </div>
-
-            <!-- Buttons Group -->
+            <div class="logo" style="font-weight:bold; font-size:24px; color:#14a800;">SkillConnect</div>
             <div style="display:flex; align-items:center; gap:10px; margin-left:auto;">
-
-                <a href="{% url 'client_chat_list' %}" style="background-color:#14a800;
-              color:white; 
-              padding:8px 16px; 
-              border-radius:15px; 
-              font-size:14px; 
-              font-weight:bold; 
-              text-decoration:none; 
-              display:flex; align-items:center; gap:6px;">
-                    <span class="material-icons" style="font-size:18px;">chat</span>
-                    Messages
+                <a href="{% url 'client_chat_list' %}"
+                    style="background-color:#14a800; color:white; padding:8px 16px; border-radius:15px; font-size:14px; font-weight:bold; text-decoration:none; display:flex; align-items:center; gap:6px;">
+                    <span class="material-icons" style="font-size:18px;">chat</span> Messages
+                </a>
+                <a href="{% url 'postJob' client.id %}"
+                    style="background-color:#14a800; color:white; padding:8px 16px; border-radius:15px; font-size:14px; font-weight:bold; text-decoration:none; display:flex; align-items:center; gap:6px;">
+                    <span class="material-icons" style="font-size:18px;">add_circle_outline</span> Post Job
                 </a>
 
-                <a href="{% url 'client_posted_jobs' %}" style="background-color:#14a800;
-              color:white; 
-              padding:8px 16px; 
-              border-radius:15px; 
-              font-size:14px; 
-              font-weight:bold; 
-              text-decoration:none;
-              display:flex; align-items:center; gap:6px;">
-                    <span class="material-icons" style="font-size:18px;">work_outline</span>
-                    Your Post Job
-                </a>
 
-                <a href="{% url 'postJob' client.id %}" style="background-color:#14a800;
-              color:white; 
-              padding:8px 16px; 
-              border-radius:15px; 
-              font-size:14px; 
-              font-weight:bold; 
-              text-decoration:none;
-              display:flex; align-items:center; gap:6px;">
-                    <span class="material-icons" style="font-size:18px;">add_circle_outline</span>
-                    Post Job
-                </a>
 
-                <a href="{% url 'client_applied_jobs' %}" style="background-color:#14a800;
-              color:white; 
-              padding:8px 16px; 
-              border-radius:15px; 
-              font-size:14px; 
-              font-weight:bold; 
-              text-decoration:none;
-              display:flex; align-items:center; gap:6px;">
-                    <span class="material-icons" style="font-size:18px;">assignment_turned_in</span>
-                    Freelancer's Responses
-                </a>
+                <!-- <a href="{% url 'client_applied_jobs' %}"
+                    style="background-color:#14a800; color:white; padding:8px 16px; border-radius:15px; font-size:14px; font-weight:bold; text-decoration:none; display:flex; align-items:center; gap:6px;">
+                    <span class="material-icons" style="font-size:18px;">assignment_turned_in</span> Freelancer's
+                    Responses
+                </a> -->
 
-                <!-- Name + Profile Group -->
+
+
+
                 <div style="display:flex; align-items:center; gap:10px;">
-                    <p style="margin:0; font-weight:500; font-size:15px;">
-                        {{ client.first_name }} {{ client.last_name }}
+                    <p style="margin:0; font-weight:500; font-size:15px;">{{ client.first_name }} {{ client.last_name }}
                     </p>
                     <div class="profile-icons">
                         <a href="{% url 'client_profile' client_id %}">
                             {% if client_info.profile_picture %}
-                            <img src="{{ client_info.profile_picture.url }}" alt="Client" class="user-icon">
+                            <img src="{{ client_info.profile_picture.url }}" alt="Client" class="user-icon"
+                                style="height:30px; width:30px; border-radius:50%;">
                             {% else %}
-                            <img src="{% static 'images/user-icon.png' %}" alt="Client" class="user-icon">
+                            <img src="{% static 'images/user-icon.png' %}" alt="Client" class="user-icon"
+                                style="height:30px; width:30px; border-radius:50%;">
                             {% endif %}
                         </a>
                     </div>
@@ -88,47 +97,120 @@
         </nav>
     </header>
 
-
-
-    <main class="container">
-        <div class="main-content">
-            <div class="search-jobs-section">
+    <main class="container" style="display:flex; gap:20px; padding:20px; box-sizing:border-box;">
+        <div class="main-content" style="flex-grow:1;">
+            <div class="search-jobs-section"
+                style="background-color:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
                 <div class="search-container">
                     <h3>Recruiters Dashboard</h3>
+
+                    <!-- Cards Grid -->
+                    <div class="recruiter-cards">
+
+                        <!-- Card 1 -->
+                        <a href="{% url 'client_overview' %}" style="text-decoration:none; display:block;">
+                            <div class="recruiter-card">
+                                <i class="fas fa-chart-line"
+                                    style="font-size:40px; color:#14a800; margin-bottom:10px;"></i>
+                                <h4 style="font-size:16px; margin:10px 0 5px; color:#0073e6;">Overview / Stats</h4>
+                                <p style="font-size:13px; color:#555; margin:0;">Total Jobs Posted, Active Jobs,
+                                    Proposals Received, Hires Made</p>
+                            </div>
+                        </a>
+
+                        <!-- Card 2 -->
+                        <a href="{% url 'client_posted_jobs' %}" style="text-decoration:none; display:block;">
+                            <div class="recruiter-card">
+                                <i class="fas fa-briefcase"
+                                    style="font-size:40px; color:#14a800; margin-bottom:10px;"></i>
+                                <h4 style="font-size:16px; margin:10px 0 5px; color:#0073e6;">Job Management</h4>
+                                <p style="font-size:13px; color:#555; margin:0;">View posted jobs, edit, close, delete,
+                                    or post new jobs.</p>
+                            </div>
+                        </a>
+
+
+                        <!-- Card 3 -->
+                        <a href="{% url 'client_applied_jobs' %}" style="text-decoration:none; display:block;">
+                            <div class="recruiter-card">
+                                <i class="fas fa-user-friends"
+                                    style="font-size:40px; color:#14a800; margin-bottom:10px;"></i>
+                                <h4 style="font-size:16px; margin:10px 0 5px; color:#0073e6;">Freelancer Management</h4>
+                                <p style="font-size:13px; color:#555; margin:0;">Manage hired freelancers, check status
+                                    &
+                                    communicate .</p>
+                            </div>
+                        </a>
+
+                        <a href="{% url 'notifications_view' %}" style="text-decoration:none; display:block;">
+                            <div class="recruiter-card">
+                                <i class="fas fa-bell" style="font-size:40px; color:#14a800; margin-bottom:10px;"></i>
+                                <h4 style="font-size:16px; margin:10px 0 5px; color:#0073e6;">Notifications / Alerts
+                                </h4>
+                                <p style="font-size:13px; color:#555; margin:0;">New proposals,
+                                    payment reminders etc.</p>
+                            </div>
+                        </a>
+
+
+
+
+                        <!-- Card 5 -->
+                        <a href="{% url 'give_feedback' %}" style="text-decoration:none; display:block;">
+                            <div class="recruiter-card">
+                                <i class="fas fa-star" style="font-size:40px; color:#14a800; margin-bottom:10px;"></i>
+                                <h4 style="font-size:16px; margin:10px 0 5px; color:#0073e6;">Feedback & Reviews</h4>
+                                <p style="font-size:13px; color:#555; margin:0;">Give feedback & average
+                                    rating, and top freelancers.</p>
+                            </div>
+                        </a>
+
+
+                        <!-- Card 6 -->
+                        <a href="{% url 'help_support' %}" style="text-decoration:none; display:block;">
+                            <div class="recruiter-card">
+                                <i class="fas fa-headset"
+                                    style="font-size:40px; color:#14a800; margin-bottom:10px;"></i>
+                                <h4 style="font-size:16px; margin:10px 0 5px; color:#0073e6;">Help & Support</h4>
+                                <p style="font-size:13px; color:#555; margin:0;">Get assistance, FAQs, and contact
+                                    support.</p>
+                            </div>
+                        </a>
+
+
+
+                    </div>
                 </div>
             </div>
         </div>
 
-
-
-
-
-
         <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="profile-card">
+        <aside class="sidebar" style="width:300px; flex-shrink:0;">
+            <div class="profile-card"
+                style="background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1); text-align:center;">
                 {% if client_info.profile_picture %}
-                <img src="{{ client_info.profile_picture.url }}" alt="Client" class="profile-picture">
+                <img src="{{ client_info.profile_picture.url }}" alt="Client" class="profile-picture"
+                    style="width:80px; height:80px; border-radius:50%; object-fit:cover; margin-bottom:10px;">
                 {% else %}
-                <img src="{% static 'images/user-icon.png' %}" alt="Client" class="profile-picture">
+                <img src="{% static 'images/user-icon.png' %}" alt="Client" class="profile-picture"
+                    style="width:80px; height:80px; border-radius:50%; object-fit:cover; margin-bottom:10px;">
                 {% endif %}
 
-                <h1>{{ client.first_name }} {{client.last_name}}</h1>
-                <h4>Bio</h4>
-                <p>{{ client_info.about }}</p>
-                <h4>Company Name</h4>
-                <p>{{ client_info.company_name }}</p>
-                <h4>Industry Name</h4>
-                <p>{{ client_info.industry }}</p>
-                <h4>Location</h4>
-                <p>{{ client_info.location }}</p>
-                <h4>Requirements</h4>
-                <p>{{ client_info.requirements }}</p>
-                <h4>Budget</h4>
-                <p>{{ client_info.budget }}</p>
-                <br>
+                <h1 style="font-size:18px; margin:10px 0;">{{ client.first_name }} {{ client.last_name }}</h1>
+                <h4 style="margin:5px 0;">Bio</h4>
+                <p style="margin:0; font-size:14px; color:#555;">{{ client_info.about }}</p>
+                <h4 style="margin:5px 0;">Company Name</h4>
+                <p style="margin:0; font-size:14px; color:#555;">{{ client_info.company_name }}</p>
+                <h4 style="margin:5px 0;">Industry Name</h4>
+                <p style="margin:0; font-size:14px; color:#555;">{{ client_info.industry }}</p>
+                <h4 style="margin:5px 0;">Location</h4>
+                <p style="margin:0; font-size:14px; color:#555;">{{ client_info.location }}</p>
+                <h4 style="margin:5px 0;">Requirements</h4>
+                <p style="margin:0; font-size:14px; color:#555;">{{ client_info.requirements }}</p>
+                <h4 style="margin:5px 0;">Budget</h4>
+                <p style="margin:0; font-size:14px; color:#555;">{{ client_info.budget }}</p>
 
-                <div class="logout-section">
+                <div class="logout-section" style="margin-top:15px;">
                     <form action="{% url 'logout' %}" method="post">
                         {% csrf_token %}
                         <button type="submit"
@@ -140,6 +222,11 @@
             </div>
         </aside>
     </main>
-    </body>
+
+    <footer
+        style="height:70px; background-color:#fff; border-top:1px solid #e5e5e5; display:flex; justify-content:center; align-items:center; font-size:14px; color:#555;">
+        <p>&copy; 2025 SkillConnect. All rights reserved.</p>
+    </footer>
+</body>
 
 </html>

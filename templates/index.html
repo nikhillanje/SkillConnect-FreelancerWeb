@@ -117,144 +117,160 @@
     </section>
 
 
-
     <section class="testimonials">
-        <h2>Real results from clients</h2>
+        <h2>Feedbacks from clients</h2>
         <div class="testimonial-grid">
+            {% for fb in feedbacks %}
             <div class="testimonial-card">
-                <div class="header-icon"><i class="fa-solid fa-code"></i> DEV & IT</div>
-                <p>"Haris came in and helped us transfer knowledge from our departing developer, meeting a serious
-                    deadline, without fail. His knowledge and experience are exceptional."</p>
+                <div class="header-icon">
+                    <i class="fa-solid fa-star"></i> {{ fb.category }}
+                </div>
+                <p>"{{ fb.feedback_text }}"</p>
                 <div class="rating">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
+                    {% for i in stars_range %}
+                    {% if i <= fb.rating %} <i class="fa-solid fa-star"></i>
+                        {% else %}
+                        <i class="fa-regular fa-star"></i>
+                        {% endif %}
+                        {% endfor %}
                 </div>
-                <div class="freelancer-info">
-                    <div class="avatar-container">
-                        <img src="{% static 'images/cli1.png' %}" alt="Haris S. avatar" class="avatar">
-                    </div>
-                    <div class="details">
-                        <p>Work done by Haris S.</p>
-                        <p>Full-Stack Developer</p>
-                        <p>Apr 7, 2025</p>
-                    </div>
-                </div>
-            </div>
-            <div class="testimonial-card">
-                <div class="header-icon"><i class="fa-solid fa-palette"></i> DESIGN & CREATIVE</div>
-                <p>"Ezzan did an amazing job editing my videos fast turnaround, great attention to detail, and very
-                    easy
-                    to work with. He follows directions well and delivers high-quality work consistently. Highly
-                    recommend him!"</p>
-                <div class="rating">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                </div>
-                <div class="freelancer-info">
-                    <div class="avatar-container">
-                        <img src="{% static 'images/cli2.png' %}" alt="Ezzan S. avatar" class="avatar">
-                    </div>
-                    <div class="details">
-                        <p>Work done by Ezzan S.</p>
-                        <p>Short form and long form video editor needed</p>
-                        <p>Mar 14, 2025</p>
-                    </div>
-                </div>
-            </div>
 
-
-            <div class="testimonial-card">
-                <div class="header-icon"><i class="fa-solid fa-brain"></i> AI SERVICES</div>
-                <p>"Rick is a fantastic AI/ML engineer with specialization in LLMs, delivering end-to-end solutions.
-                    We
-                    had a few concepts when we started the work; ultimately, he delivered a working solution.
-                    Looking
-                    forward to working with him again."</p>
-                <div class="rating">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                </div>
                 <div class="freelancer-info">
                     <div class="avatar-container">
-                        <img src="{% static 'images/cli3.png' %}" alt="Richard C. avatar" class="avatar">
+                        {% if fb.client_profile_pic %}
+                        <img src="{{ fb.client_profile_pic.url }}" alt="{{ fb.client_name }}" class="avatar">
+                        {% else %}
+                        <img src="{% static 'images/default.png' %}" alt="default avatar" class="avatar">
+                        {% endif %}
+
                     </div>
                     <div class="details">
-                        <p>Work done by Richard C.</p>
-                        <p>LLM/RAG agent system development</p>
-                        <p>Mar 29, 2025</p>
+                        {% if fb.freelancer %}
+                        <p>Work done by {{ fb.freelancer.first_name }} {{ fb.freelancer.last_name }}</p>
+                        {% endif %}
+                        <p>{{ fb.client_name }}</p>
+                        <p>{{ fb.created_at|date:"M d, Y" }}</p>
                     </div>
                 </div>
             </div>
+            {% empty %}
+            <p style="text-align:center; width:100%;">No feedback available yet.</p>
+            {% endfor %}
         </div>
     </section>
 
+    <h2 style="font-size: 35px; font-weight: bold; " class="testimonials">Frquently Asked Questions</h2>
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-column">
-                <h4>For Clients</h4>
-                <ul>
-                    <li><a href="#">How to hire</a></li>
-                    <li><a href="#">Talent Marketplace</a></li>
-                    <li><a href="#">Project Catalog</a></li>
-                    <li><a href="#">Hire an agency</a></li>
-                    <li><a href="#">Enterprise</a></li>
-                    <li><a href="#">Business Plus</a></li>
-                    <li><a href="#">Any Hire</a></li>
-                    <li><a href="#">Contract-to-hire</a></li>
-                    <li><a href="#">Direct Contracts</a></li>
-                    <li><a href="#">Hire worldwide</a></li>
-                    <li><a href="#">Hire in the USA</a></li>
+                <h4>FAQ</h4>
+                <ul class="faq-list">
+                    <li class="faq-item">
+                        <a href="#">How do I create a freelancer/client account?</a>
+                        <i class="fa-solid fa-chevron-down faq-toggle"></i>
+                        <div class="faq-answer">You can sign up as a freelancer or client by clicking on the signup
+                            button and selecting your role.</div>
+                    </li>
+                    <li class="faq-item">
+                        <a href="#">Is this platform only for Indian users?</a>
+                        <i class="fa-solid fa-chevron-down faq-toggle"></i>
+                        <div class="faq-answer">Yes, currently our platform is designed only for Indian freelancers and
+                            clients.</div>
+                    </li>
+                    <li class="faq-item">
+                        <a href="#">How are payments handled securely?</a>
+                        <i class="fa-solid fa-chevron-down faq-toggle"></i>
+                        <div class="faq-answer">Payments are processed through secure gateways with escrow protection
+                            for both clients and freelancers.</div>
+                    </li>
+                    <li class="faq-item">
+                        <a href="#">What service fees are charged?</a>
+                        <i class="fa-solid fa-chevron-down faq-toggle"></i>
+                        <div class="faq-answer">A small percentage of the project fee is charged as a service fee.
+                            Details are available on our pricing page.</div>
+                    </li>
+                    <li class="faq-item">
+                        <a href="#">How do I contact support?</a>
+                        <i class="fa-solid fa-chevron-down faq-toggle"></i>
+                        <div class="faq-answer">You can contact our support team through the “Contact Us” page or email
+                            us directly.</div>
+                    </li>
                 </ul>
             </div>
+
+            <div class="footer-column">
+                <h4>For Clients</h4>
+                <ul class="faq-list">
+                    <li class="faq-item">
+                        <a href="#">How to hire</a>
+                        <i class="fa-solid fa-chevron-down faq-toggle"></i>
+                        <div class="faq-answer">Browse freelancers, review profiles, and send hire requests directly.
+                        </div>
+                    </li>
+                    <li class="faq-item">
+                        <a href="#">Talent Marketplace</a>
+                        <i class="fa-solid fa-chevron-down faq-toggle"></i>
+                        <div class="faq-answer">Explore a wide marketplace of freelancers across different categories.
+                        </div>
+                    </li>
+                    <li class="faq-item">
+                        <a href="#">Project Catalog</a>
+                        <i class="fa-solid fa-chevron-down faq-toggle"></i>
+                        <div class="faq-answer">Clients can browse ready-made project offers and purchase directly.
+                        </div>
+                    </li>
+                    <li class="faq-item">
+                        <a href="#">Hire an agency</a>
+                        <i class="fa-solid fa-chevron-down faq-toggle"></i>
+                        <div class="faq-answer">Agencies allow you to hire a full team of experts for bigger projects.
+                        </div>
+                    </li>
+                    <li class="faq-item">
+                        <a href="#">Enterprise</a>
+                        <i class="fa-solid fa-chevron-down faq-toggle"></i>
+                        <div class="faq-answer">Large companies can access our enterprise solutions with dedicated
+                            support.</div>
+                    </li>
+                </ul>
+            </div>
+
             <div class="footer-column">
                 <h4>For Talent</h4>
-                <ul>
-                    <li><a href="#">How to find work</a></li>
-                    <li><a href="#">Direct Contracts</a></li>
-                    <li><a href="#">Find freelance jobs worldwide</a></li>
-                    <li><a href="#">Find freelance jobs in the USA</a></li>
-                    <li><a href="#">Win work with ads</a></li>
-                    <li><a href="#">Exclusive resources with Freelancer Plus</a></li>
+                <ul class="faq-list">
+                    <li class="faq-item">
+                        <a href="#">How to find work</a>
+                        <i class="fa-solid fa-chevron-down faq-toggle"></i>
+                        <div class="faq-answer">Apply to jobs posted by clients or showcase your project catalog.</div>
+                    </li>
+                    <li class="faq-item">
+                        <a href="#">Direct Contracts</a>
+                        <i class="fa-solid fa-chevron-down faq-toggle"></i>
+                        <div class="faq-answer">Work with clients directly and manage contracts safely on the platform.
+                        </div>
+                    </li>
+                    <li class="faq-item">
+                        <a href="#">Freelance jobs in India</a>
+                        <i class="fa-solid fa-chevron-down faq-toggle"></i>
+                        <div class="faq-answer">We list verified freelance jobs only from India to ensure authenticity.
+                        </div>
+                    </li>
+                    <li class="faq-item">
+                        <a href="#">Win work with ads</a>
+                        <i class="fa-solid fa-chevron-down faq-toggle"></i>
+                        <div class="faq-answer">Boost your profile visibility by promoting your services.</div>
+                    </li>
+                    <li class="faq-item">
+                        <a href="#">Freelancer Plus resources</a>
+                        <i class="fa-solid fa-chevron-down faq-toggle"></i>
+                        <div class="faq-answer">Upgrade to Freelancer Plus for premium job insights and resources.</div>
+                    </li>
                 </ul>
             </div>
-            <div class="footer-column">
-                <h4>Resources</h4>
-                <ul>
-                    <li><a href="#">Help & support</a></li>
-                    <li><a href="#">Success stories</a></li>
-                    <li><a href="#">SkillConnect reviews</a></li>
-                    <li><a href="#">Resources</a></li>
-                    <li><a href="#">Blog</a></li>
-                    <li><a href="#">Affiliate programme</a></li>
-                    <li><a href="#">Free Business Tools</a></li>
-                    <li><a href="#">Release notes</a></li>
-                </ul>
-            </div>
-            <div class="footer-column">
-                <h4>Company</h4>
-                <ul>
-                    <li><a href="#">About us</a></li>
-                    <li><a href="#">Leadership</a></li>
-                    <li><a href="#">Investor relations</a></li>
-                    <li><a href="#">Careers</a></li>
-                    <li><a href="#">Our impact</a></li>
-                    <li><a href="#">Press</a></li>
-                    <li><a href="#">Contact us</a></li>
-                    <li><a href="#">Partners</a></li>
-                    <li><a href="#">Trust, safety & security</a></li>
-                    <li><a href="#">Modern slavery statement</a></li>
-                </ul>
-            </div>
+
+
         </div>
+        </div>
+
         <div class="footer-bottom">
             <div class="social-links">
                 <p>Follow us</p>

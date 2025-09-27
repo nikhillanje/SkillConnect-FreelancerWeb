@@ -1,7 +1,7 @@
 /* ---------- Global Styles ---------- */
 body {
     font-family: "Inter", sans-serif;
-    background: linear-gradient(135deg, #f0f4f7, #eaf6ff);
+    background: #E0FBE2; /* Updated background */
     padding: 40px 20px;
     margin: 0;
     color: #333;
@@ -14,13 +14,19 @@ body {
 
 /* ---------- Headings ---------- */
 h2 {
-    color: #2a2a2a;
     font-size: 32px;
     margin-bottom: 25px;
     text-align: center;
     font-weight: 600;
     letter-spacing: 1px;
     text-transform: uppercase;
+
+    /* Gradient text */
+    background: linear-gradient(135deg, #14a800, #8de38c);
+    -webkit-background-clip: text; /* Chrome, Safari */
+    -webkit-text-fill-color: transparent;
+    background-clip: text; /* Standard property */
+    color: transparent;
 }
 
 /* ---------- Profile Section ---------- */
@@ -28,16 +34,17 @@ h2 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: linear-gradient(135deg, #ffffff, #f9fbfd);
+    background: linear-gradient(135deg, #ffffff, #f0fff4);
     padding: 30px;
     border-radius: 16px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.15);
     margin-bottom: 35px;
-    transition: transform 0.2s ease;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .profile-container:hover {
-    transform: translateY(-3px);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
 }
 
 .profile-info {
@@ -53,17 +60,13 @@ h2 {
 
 .profile-pic {
     width: 160px;
-    /* remove fixed height */
-    /* height: 160px; */
     border-radius: 50%;
     border: 4px solid #14a800;
     overflow: hidden;
     flex-shrink: 0;
-    box-shadow: 0 4px 12px rgba(20, 168, 0, 0.3);
-
+    box-shadow: 0 4px 16px rgba(20, 168, 0, 0.35);
     display: flex;
     flex-direction: column;
-    /* stack image and label vertically */
     align-items: center;
 }
 
@@ -76,7 +79,6 @@ h2 {
 
 .change-pic-label {
     margin-top: 10px;
-    /* space below image */
     display: inline-block;
     cursor: pointer;
     color: #3b49df;
@@ -102,7 +104,7 @@ hr {
     background: #ffffff;
     padding: 25px 30px;
     border-radius: 14px;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
     margin-bottom: 25px;
     line-height: 1.8;
     border-left: 6px solid #14a800;
@@ -117,7 +119,7 @@ hr {
     background: #ffffff;
     padding: 25px 30px;
     border-radius: 14px;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
     border-left: 6px solid #14a800;
 }
 
@@ -147,7 +149,7 @@ hr {
 .form-group textarea:focus,
 .form-group select:focus {
     border-color: #14a800;
-    box-shadow: 0 0 6px rgba(20, 168, 0, 0.3);
+    box-shadow: 0 0 8px rgba(20, 168, 0, 0.35);
     outline: none;
 }
 
@@ -162,13 +164,14 @@ hr {
     font-size: 15px;
     margin-top: 15px;
     font-weight: 600;
-    box-shadow: 0 3px 8px rgba(20, 168, 0, 0.3);
+    box-shadow: 0 4px 12px rgba(20, 168, 0, 0.35);
     transition: all 0.2s ease;
 }
 
 .update-btn:hover {
     background: linear-gradient(135deg, #0e7a00, #14a800);
     transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(20, 168, 0, 0.45);
 }
 
 .cancel-btn {
@@ -184,4 +187,12 @@ hr {
 /* ---------- Utility ---------- */
 .hidden {
     display: none;
+}
+
+/* ---------- Selected Profile Highlight ---------- */
+.profile-container.selected {
+    background: linear-gradient(135deg, #d0ffd0, #b4fbb4);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+    border-left: 6px solid #14a800;
+    transform: translateY(-4px);
 }

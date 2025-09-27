@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help & Support</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #f4f7f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .support-container {
+            max-width: 600px;
+            margin: 60px auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .support-container h2 {
+            text-align: center;
+            color: #14a800;
+            margin-bottom: 25px;
+        }
+
+        .support-container form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .support-container input,
+        .support-container textarea {
+            margin-bottom: 20px;
+            padding: 12px 15px;
+            font-size: 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            outline: none;
+            transition: border 0.3s ease;
+        }
+
+        .support-container input:focus,
+        .support-container textarea:focus {
+            border-color: #14a800;
+        }
+
+        .support-container button {
+            background: #14a800;
+            color: #fff;
+            padding: 12px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .support-container button:hover {
+            background: #0d7d35;
+        }
+
+        .success-message {
+            text-align: center;
+            color: #14a800;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .error-message {
+            text-align: center;
+            color: red;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="support-container">
+        <h2>Help & Support</h2>
+
+        {% if success %}
+        <div class="success-message">{{ success }}</div>
+        {% endif %}
+        {% if error %}
+        <div class="error-message">{{ error }}</div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            <input type="text" name="name" placeholder="Your Name" required>
+            <input type="email" name="email" placeholder="Your Email" required>
+            <textarea name="query" placeholder="Your Query" rows="6" required></textarea>
+            <button type="submit">Submit Query</button>
+        </form>
+    </div>
+
+</body>
+
+</html>

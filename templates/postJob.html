@@ -3,49 +3,255 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Post Job</title>
-    <link rel="stylesheet" href="{% static 'css/postJob.css' %}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post Job - SkillConnect</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    :root {
+      --primary-green: #14a800;
+      --primary-green-dark: #108a00;
+      --dark-grey: #1c1c1c;
+      --light-grey: #f2f2f2;
+      --white: #ffffff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #ecfae5 0%, #d5f3c1 100%);
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+      padding: 60px 0;
+    }
+
+    /* Floating bubbles */
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.15;
+      animation: float 12s infinite ease-in-out alternate;
+      background: radial-gradient(circle, #14a800 0%, #88c057 100%);
+      z-index: 0;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-30px) scale(1.1); }
+      100% { transform: translateY(0) scale(1); }
+    }
+
+    /* Back Button */
+    .back-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--primary-green);
+      color: var(--white);
+      padding: 10px 18px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      transition: all 0.3s ease, box-shadow 0.3s ease;
+      z-index: 10;
+    }
+
+    .back-btn:hover {
+      background: var(--primary-green-dark);
+      transform: scale(1.05);
+      box-shadow: 0 6px 15px rgba(20, 168, 0, 0.3);
+    }
+
+    .back-btn .material-icons {
+      margin-right: 5px;
+      vertical-align: middle;
+    }
+
+    /* Container */
+    .container {
+      position: relative;
+      width: 90%;
+      max-width: 650px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(15px);
+      border-radius: 25px;
+      padding: 50px 35px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+      margin: auto;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      color: var(--primary-green);
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    /* Error & Success messages */
+    .message {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .message.error { color: red; }
+    .message.success { color: green; }
+
+    /* Form */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .form-group label {
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--dark-grey);
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      padding: 15px 20px;
+      border: none;
+      border-radius: 20px;
+      font-size: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+      background-color: #f7fdf3;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      box-shadow: 0 4px 20px rgba(20, 168, 0, 0.3);
+      background-color: #ffffff;
+    }
+
+    textarea { resize: vertical; min-height: 90px; }
+
+    /* Submit Button */
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 30px;
+      background: linear-gradient(135deg, #14a800, #88c057);
+      color: var(--white);
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease, box-shadow 0.4s ease;
+      margin-top: 10px;
+    }
+
+    .submit-btn:hover {
+      background: linear-gradient(135deg, #88c057, #14a800);
+      transform: scale(1.05);
+      box-shadow: 0 10px 25px rgba(20, 168, 0, 0.35);
+    }
+
+    /* Responsive */
+    @media screen and (max-width: 480px) {
+      .container { padding: 30px 20px; }
+      .submit-btn { font-size: 15px; padding: 14px; }
+    }
+  </style>
 </head>
 
 <body>
-    <!-- Back Button -->
-    <a href="{% url 'clientHome' %}" class="back-btn">Back</a>
-    <div class="container">
+  <!-- Floating bubbles -->
+  <div class="bubble" style="width:100px; height:100px; left:10%; top:20%; animation-delay:0s;"></div>
+  <div class="bubble" style="width:60px; height:60px; left:70%; top:10%; animation-delay:2s;"></div>
+  <div class="bubble" style="width:140px; height:140px; left:50%; top:60%; animation-delay:1s;"></div>
+  <div class="bubble" style="width:80px; height:80px; left:30%; top:75%; animation-delay:3s;"></div>
+  <div class="bubble" style="width:50px; height:50px; left:80%; top:50%; animation-delay:4s;"></div>
 
+  <!-- Back Button -->
+  <a href="{% url 'clientHome' %}" class="back-btn">
+    <span class="material-icons">arrow_back</span> Back
+  </a>
 
-        <h2>Post a Job</h2>
-        <form action="{% url 'postJob' client.id %}" method="post" class="job-form">
-            {% csrf_token %}
+  <div class="container">
+    <h2>Post a Job</h2>
 
-            <div class="form-group">
-                <label for="title">Job Title</label>
-                <input type="text" id="title" name="title" required>
-            </div>
+    <!-- Display Errors or Success -->
+    {% if error %}
+      <p class="message error">{{ error }}</p>
+    {% endif %}
+    {% if messages %}
+      {% for message in messages %}
+        <p class="message success">{{ message }}</p>
+      {% endfor %}
+    {% endif %}
 
-            <div class="form-group">
-                <label for="description">Description / Location</label>
-                <textarea id="description" name="description" required></textarea>
-            </div>
+    <form action="{% url 'postJob' client.id %}" method="post" enctype="multipart/form-data" class="job-form">
+      {% csrf_token %}
 
-            <div class="form-group">
-                <label for="pay_per_hour">Pay per Hour</label>
-                <input type="number" id="pay_per_hour" step="0.01" name="pay_per_hour" required>
-            </div>
+      <div class="form-group">
+        <label for="title">Job Title</label>
+        <input type="text" id="title" name="title" value="{{ form_data.title }}" required>
+      </div>
 
-            <div class="form-group">
-                <label for="tech_stack">Tech Stack</label>
-                <input type="text" id="tech_stack" name="tech_stack" required>
-            </div>
+      <!-- Optional Company Dropdown -->
+      {% if companies %}
+      <div class="form-group">
+        <label for="company_id">Select Company</label>
+        <select name="company_id" id="company_id" required>
+          <option value="">Select Company</option>
+          {% for company in companies %}
+            <option value="{{ company.id }}" {% if form_data.company_id|stringformat:"s" == company.id|stringformat:"s" %}selected{% endif %}>
+              {{ company.name }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+      {% endif %}
 
-            <div class="form-group">
-                <label for="requirements">Requirements</label>
-                <textarea id="requirements" name="requirements" required></textarea>
-            </div>
+      <div class="form-group">
+        <label for="description">Description / Location</label>
+        <textarea id="description" name="description" required>{{ form_data.description }}</textarea>
+      </div>
 
-            <button type="submit" class="submit-btn">Post Job</button>
-        </form>
-    </div>
+      <div class="form-group">
+        <label for="pay_per_hour">Pay per Hour</label>
+        <input type="number" id="pay_per_hour" step="0.01" name="pay_per_hour" value="{{ form_data.pay_per_hour }}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="tech_stack">Tech Stack</label>
+        <input type="text" id="tech_stack" name="tech_stack" value="{{ form_data.tech_stack }}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="requirements">Requirements</label>
+        <textarea id="requirements" name="requirements" required>{{ form_data.requirements }}</textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="job_image">Job Image</label>
+        <input type="file" id="job_image" name="job_image" accept="image/*">
+      </div>
+
+      <button type="submit" class="submit-btn">Post Job</button>
+    </form>
+  </div>
 </body>
 
 </html>

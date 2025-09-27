@@ -45,3 +45,22 @@ toggleButtons.forEach(button => {
         document.getElementById(tabId).classList.add("active");
     });
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    const toggles = document.querySelectorAll(".faq-toggle");
+
+    toggles.forEach(toggle => {
+        toggle.addEventListener("click", () => {
+            const item = toggle.closest(".faq-item");
+
+            // Close other open FAQs (optional, like accordion)
+            document.querySelectorAll(".faq-item").forEach(i => {
+                if (i !== item) i.classList.remove("active");
+            });
+
+            // Toggle current FAQ
+            item.classList.toggle("active");
+        });
+    });
+});
+

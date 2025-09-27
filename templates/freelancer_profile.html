@@ -4,44 +4,266 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ freelancer.first_name }}'s Profile</title>
-    <link rel="stylesheet" href="{% static 'css/freelancer_profile.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        /* Body background with gradient */
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #E0FBE2, #C0F7B0);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 50px 20px;
+            overflow-x: hidden;
+        }
+
+        /* Floating circles animation */
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            animation: float 10s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(45deg); }
+        }
+
+        /* Profile card */
+        .page-container {
+            width: 100%;
+            max-width: 900px;
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 25px;
+            padding: 40px 50px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+            backdrop-filter: blur(12px);
+            position: relative;
+            z-index: 1;
+            animation: fadeIn 1s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #2e7d32;
+            margin-bottom: 35px;
+            font-weight: bold;
+            text-shadow: 1px 1px 6px rgba(0,0,0,0.2);
+        }
+
+        .profile-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 35px;
+        }
+
+        .profile-info {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .profile-info p {
+            font-size: 1.05rem;
+            margin: 10px 0;
+            color: #333;
+        }
+
+        /* Profile picture with halo glow */
+        .profile-pic {
+            position: relative;
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+        }
+
+        .profile-pic::after {
+            content: '';
+            position: absolute;
+            top: -20%;
+            left: -20%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(76,175,80,0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(15px);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .profile-pic:hover {
+            transform: scale(1.1);
+        }
+
+        .profile-pic:hover::after {
+            opacity: 1;
+        }
+
+        .profile-pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .change-pic-label {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(45deg, #4CAF50, #66BB6A);
+            color: white;
+            padding: 10px 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .change-pic-label:hover {
+            transform: scale(1.3) rotate(15deg);
+            background: linear-gradient(45deg, #388E3C, #4CAF50);
+        }
+
+        /* Buttons */
+        .update-btn {
+            background: linear-gradient(45deg, #81C784, #4CAF50);
+            border: none;
+            padding: 12px 25px;
+            margin: 8px 5px 0 0;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #fff;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .update-btn:hover {
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 10px 28px rgba(0,0,0,0.35);
+        }
+
+        .logout-btn {
+            background: linear-gradient(45deg, #FF5252, #e53935);
+        }
+
+        .back-btn {
+            background: linear-gradient(45deg, #4CAF50, #2e7d32);
+        }
+
+        .readonly-block p {
+            font-size: 1rem;
+            margin: 8px 0;
+            opacity: 0;
+            animation: fadeInText 0.6s forwards;
+        }
+
+        @keyframes fadeInText {
+            from { opacity: 0; transform: translateX(-10px);}
+            to { opacity: 1; transform: translateX(0);}
+        }
+
+        .resume-link {
+            color: #388E3C;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .resume-link:hover {
+            text-decoration: underline;
+        }
+
+        .no-resume { color: #888; }
+
+        .update-form {
+            margin-top: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .update-form.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .form-group input[type="text"],
+        .form-group textarea,
+        .form-group input[type="file"] {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+
+        .form-actions { margin-top: 15px; }
+
+        .hidden { display: none; }
+
+        @media (max-width: 600px) {
+            .profile-container { flex-direction: column; align-items: center; }
+            .profile-info { text-align: center; }
+        }
+    </style>
 </head>
 
 <body>
-    <div class="page-container">
-        <h2>Profile</h2>
+    <!-- Floating circles for extra motion -->
+    <div class="circle" style="width:50px;height:50px;top:20%;left:10%;animation-duration:12s;"></div>
+    <div class="circle" style="width:30px;height:30px;top:60%;left:80%;animation-duration:18s;"></div>
+    <div class="circle" style="width:40px;height:40px;top:40%;left:50%;animation-duration:15s;"></div>
 
-        <!-- Profile Section -->
+    <div class="page-container">
+        <h2>Freelancer Profile</h2>
+
         <div class="profile-container">
-            <!-- Left: Info -->
             <div class="profile-info">
                 <p><strong>Name:</strong> {{ freelancer.first_name }} {{ freelancer.last_name }}</p>
                 <p><strong>Email:</strong> {{ freelancer.email }}</p>
                 <p><strong>Mobile:</strong> {{ freelancer.mobile_number }}</p>
             </div>
 
-            <!-- Profile Picture Upload -->
             <div class="profile-pic">
-                <img src="{% if profile.profile_picture %}{{ profile.profile_picture.url }}{% else %}{% static 'images/default.png' %}{% endif %}"
-                    alt=" " class="pic">
-
-                <form id="profile-pic-form" method="post" enctype="multipart/form-data"
-                    action="{% url 'update_profile_picture' %}">
+                <img src="{% if profile.profile_picture %}{{ profile.profile_picture.url }}{% else %}{% static 'images/default.png' %}{% endif %}" alt="Profile Picture">
+                <form id="profile-pic-form" method="post" enctype="multipart/form-data" action="{% url 'update_profile_picture' %}">
                     {% csrf_token %}
-                    <input type="file" id="id_profile_picture" name="profile_picture" accept="image/*" hidden
-                        onchange="document.getElementById('profile-pic-form').submit()">
-                    <label for="id_profile_picture" class="change-pic-label">
-                        <i class="fas fa-camera" style="font-size:40px; color:#333;"></i>
-                    </label>
+                    <input type="file" id="id_profile_picture" name="profile_picture" accept="image/*" hidden onchange="document.getElementById('profile-pic-form').submit()">
+                    <label for="id_profile_picture" class="change-pic-label"><i class="fas fa-camera"></i></label>
                 </form>
             </div>
         </div>
 
         <hr>
 
-        <!-- Read-Only View -->
         <div id="readonly-view" class="readonly-block">
             <p><strong>Bio:</strong> {{ profile.bio }}</p>
             <p><strong>Skills:</strong> {{ profile.skills }}</p>
@@ -49,66 +271,32 @@
             <p><strong>Education:</strong> {{ profile.education }}</p>
             <p><strong>Language:</strong> {{ profile.language }}</p>
             <p><strong>Address:</strong> {{ profile.address }}</p>
-
             <p><strong>Resume:</strong>
                 {% if profile.resume %}
-                <a href="{{ profile.resume.url }}" target="_blank" style="color:blue; text-decoration:underline;">
-                    View Your Resume
-                </a>
+                <a href="{{ profile.resume.url }}" target="_blank" class="resume-link">View Your Resume</a>
                 {% else %}
-                <span style="color:red;">No resume found</span>
+                <span class="no-resume">No resume found</span>
                 {% endif %}
             </p>
 
             <button id="edit-btn" class="update-btn">Update</button>
-            <a href="{% url 'logout' %}" class="update-btn"
-                style="text-decoration:none; float:right; background-color: red;">Log out</a>
-            <a href="{% url 'freelancerHome' %}" class="update-btn"
-                style="text-decoration:none; float:right; margin-right: 10px;">Back</a>
+            <a href="{% url 'logout' %}" class="update-btn logout-btn">Log out</a>
+            <a href="{% url 'freelancerHome' %}" class="update-btn back-btn">Back</a>
         </div>
 
-
-        <!-- Editable Form -->
         <form id="edit-form" method="post" enctype="multipart/form-data" class="update-form hidden">
             {% csrf_token %}
-
+            <div class="form-group"><label for="id_bio"><strong>Bio:</strong></label>{{ form.bio }}</div>
+            <div class="form-group"><label for="id_skills"><strong>Skills:</strong></label>{{ form.skills }}</div>
+            <div class="form-group"><label for="id_experience"><strong>Experience:</strong></label>{{ form.experience }}</div>
+            <div class="form-group"><label for="id_education"><strong>Education:</strong></label>{{ form.education }}</div>
+            <div class="form-group"><label for="id_language"><strong>Language:</strong></label>{{ form.language }}</div>
+            <div class="form-group"><label for="id_address"><strong>Address:</strong></label>{{ form.address }}</div>
             <div class="form-group">
-                <label for="id_bio"><strong>Bio:</strong></label><br>
-                {{ form.bio }}
-            </div>
-
-            <div class="form-group">
-                <label for="id_skills"><strong>Skills:</strong></label><br>
-                {{ form.skills }}
-            </div>
-
-            <div class="form-group">
-                <label for="id_experience"><strong>Experience:</strong></label><br>
-                {{ form.experience }}
-            </div>
-
-            <div class="form-group">
-                <label for="id_education"><strong>Education:</strong></label><br>
-                {{ form.education }}
-            </div>
-
-            <div class="form-group">
-                <label for="id_language"><strong>Language:</strong></label><br>
-                {{ form.language }}
-            </div>
-
-            <div class="form-group">
-                <label for="id_address"><strong>Address:</strong></label><br>
-                {{ form.address }}
-            </div>
-
-            <div class="form-group">
-                <label for="id_resume"><strong>Resume (PDF only):</strong></label><br>
+                <label for="id_resume"><strong>Resume (PDF only):</strong></label>
                 <input type="file" id="id_resume" name="resume" accept="application/pdf">
                 {% if profile.resume %}
-                <p>Current Resume:
-                    <a href="{{ profile.resume.url }}" target="_blank">View Resume</a>
-                </p>
+                <p>Current Resume: <a href="{{ profile.resume.url }}" target="_blank">View Resume</a></p>
                 {% endif %}
             </div>
             <div class="form-actions">
@@ -118,7 +306,25 @@
         </form>
     </div>
 
-    <script src="{% static 'js/freelancer_profile.js' %}"></script>
+    <script>
+        // Toggle edit form
+        const editBtn = document.getElementById('edit-btn');
+        const cancelBtn = document.getElementById('cancel-btn');
+        const readonlyView = document.getElementById('readonly-view');
+        const editForm = document.getElementById('edit-form');
+
+        editBtn.addEventListener('click', () => {
+            readonlyView.classList.add('hidden');
+            editForm.classList.remove('hidden');
+            editForm.classList.add('show');
+        });
+
+        cancelBtn.addEventListener('click', () => {
+            editForm.classList.add('hidden');
+            editForm.classList.remove('show');
+            readonlyView.classList.remove('hidden');
+        });
+    </script>
 </body>
 
 </html>

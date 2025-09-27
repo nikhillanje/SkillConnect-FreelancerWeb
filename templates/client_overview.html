@@ -1,0 +1,174 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Client Overview</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto:wght@300;500&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: #1c1c1c;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #f4f6f8, #eafbea);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .background-shape {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.15;
+            z-index: 0;
+            animation: float 8s infinite ease-in-out;
+        }
+
+        .shape1 { width: 220px; height: 220px; top: 50px; left: -80px; background: #00b300; }
+        .shape2 { width: 150px; height: 150px; bottom: 60px; right: -60px; background: #008000; animation-delay: 3s; }
+
+        @keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-20px);} }
+
+        .overview-container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 8px 26px rgba(0,0,0,0.12);
+            animation: fadeIn 0.7s ease-in-out;
+        }
+
+        @keyframes fadeIn { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
+
+        h2 {
+            text-align:center; font-size:32px; font-weight:700; font-family:'Roboto',sans-serif; letter-spacing:1px;
+            color:#00b300; margin-bottom:40px; text-transform:uppercase; position:relative;
+        }
+
+        h2::after {
+            content:""; display:block; width:60px; height:3px; background:#00b300; margin:10px auto 0; border-radius:3px;
+        }
+
+        .client-info { display:flex; align-items:center; justify-content:center; gap:25px; margin-bottom:50px; flex-wrap:wrap; text-align:left; animation:slideIn 0.8s ease-in-out; }
+        @keyframes slideIn { from{opacity:0;transform:translateX(-40px);} to{opacity:1;transform:translateX(0);} }
+
+        .client-info img { width:120px; height:120px; border-radius:50%; object-fit:cover; border:3px solid #00b300; box-shadow:0 4px 14px rgba(0,179,0,0.3); transition: transform 0.4s ease; }
+        .client-info img:hover { transform: scale(1.1) rotate(5deg); }
+        .client-details h3 { margin:0; font-size:24px; font-weight:600; color:#00b300; }
+        .client-details p { margin:6px 0; font-size:15px; color:#444; }
+
+        /* Stats container: single row with scroll */
+        .stats-container { display:flex; justify-content:center; gap:35px; flex-wrap:nowrap; overflow-x:auto; padding-bottom:10px; }
+
+        .stat-card {
+            background:#fff; border-radius:14px; padding:24px; width:220px; box-shadow:0 8px 18px rgba(0,0,0,0.1);
+            text-align:center; transition: transform 0.3s ease, box-shadow 0.3s ease; position:relative; overflow:hidden;
+            flex-shrink:0; opacity:0; transform:translateY(20px); animation:fadeUp 0.6s forwards;
+        }
+
+        .stat-card:nth-child(1){animation-delay:0.1s;}
+        .stat-card:nth-child(2){animation-delay:0.3s;}
+        .stat-card:nth-child(3){animation-delay:0.5s;}
+        .stat-card:nth-child(4){animation-delay:0.7s;}
+
+        @keyframes fadeUp { to{opacity:1;transform:translateY(0);} }
+
+        .stat-card::before { content:""; position:absolute; top:-40%; left:-40%; width:200%; height:200%; background:radial-gradient(circle, rgba(0,179,0,0.08) 20%, transparent 70%); transform:rotate(25deg); }
+        .stat-card:hover { transform:translateY(-8px) scale(1.02); box-shadow:0px 12px 28px rgba(0,0,0,0.18); }
+
+        .circle {
+            width:120px; height:120px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 18px auto;
+            position:relative; background: conic-gradient(#e0f5e0 0deg, #e0f5e0 0);
+        }
+
+        /* Circular animation with stagger */
+        .stat-card:nth-child(1) .circle { animation: fillCircle 1.5s ease 0.1s forwards; }
+        .stat-card:nth-child(2) .circle { animation: fillCircle 1.5s ease 0.3s forwards; }
+        .stat-card:nth-child(3) .circle { animation: fillCircle 1.5s ease 0.5s forwards; }
+        .stat-card:nth-child(4) .circle { animation: fillCircle 1.5s ease 0.7s forwards; }
+
+        @keyframes fillCircle {
+            from { background: conic-gradient(#00b300 0deg, #e0f5e0 0deg); }
+            to { background: conic-gradient(#00b300 var(--percent), #e0f5e0 0deg); }
+        }
+
+        .circle::before { content:""; position:absolute; width:88px; height:88px; border-radius:50%; background:#fff; }
+        .circle span { position:relative; font-size:22px; font-weight:600; color:#00b300; animation: countUp 1.5s ease forwards; }
+
+        @keyframes countUp { from{opacity:0;transform:scale(0.8);} to{opacity:1;transform:scale(1);} }
+
+        .stat-card p { margin:0; font-weight:600; font-size:15px; color:#333; }
+
+        .back-btn { text-align:center; margin-top:50px; animation:fadeIn 1s ease-in-out; }
+        .back-btn a {
+            display:inline-block; padding:13px 28px; background:#00b300; color:white; text-decoration:none; border-radius:12px;
+            font-weight:600; font-size:16px; transition:background 0.3s ease, transform 0.2s ease; box-shadow:0 4px 12px rgba(0,179,0,0.3);
+        }
+        .back-btn a:hover { background:#008000; transform:scale(1.08); }
+
+        .stats-container::-webkit-scrollbar{display:none;}
+        .stats-container{-ms-overflow-style:none;scrollbar-width:none;}
+    </style>
+</head>
+
+<body>
+    <div class="background-shape shape1"></div>
+    <div class="background-shape shape2"></div>
+
+    <div class="overview-container">
+        <div class="client-info">
+            {% if client_info and client_info.profile_picture %}
+            <img src="{{ client_info.profile_picture.url }}" alt="Profile Picture">
+            {% else %}
+            <img src="{% static 'default_profile.png' %}" alt="Profile Picture">
+            {% endif %}
+            <div class="client-details">
+                <h3>{{ client.first_name }} {{ client.last_name }}</h3>
+                <p>Email: {{ client.email }}</p>
+                <p>Mobile: {{ client.mobile_number }}</p>
+            </div>
+        </div>
+
+        <h2>Client Overview</h2>
+
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="circle" style="--percent: {{ total_jobs_percent }}%;">
+                    <span>{{ total_jobs }}</span>
+                </div>
+                <p>Total Jobs Posted</p>
+            </div>
+            <div class="stat-card">
+                <div class="circle" style="--percent: {{ active_jobs_percent }}%;">
+                    <span>{{ active_jobs }}</span>
+                </div>
+                <p>Active Jobs</p>
+            </div>
+            <div class="stat-card">
+                <div class="circle" style="--percent: {{ proposals_percent }}%;">
+                    <span>{{ proposals }}</span>
+                </div>
+                <p>Proposals Received</p>
+            </div>
+            <div class="stat-card">
+                <div class="circle" style="--percent: {{ hires_percent }}%;">
+                    <span>{{ hires }}</span>
+                </div>
+                <p>Hires Made</p>
+            </div>
+        </div>
+
+        <div class="back-btn">
+            <a href="{% url 'clientHome' %}">Back to Dashboard</a>
+        </div>
+    </div>
+</body>
+</html>

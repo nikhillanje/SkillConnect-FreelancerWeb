@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Job</title>
+    <link rel="stylesheet" href="{% static 'css/client_posted_jobs.css' %}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fafafa;
+        }
+
+        .form-container {
+            width: 60%;
+            margin: 40px auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 12px;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 6px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            margin-top: 20px;
+            background-color: #14a800;
+            color: white;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #0f7a00;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 15px;
+            text-decoration: none;
+            color: #555;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="{% url 'client_posted_jobs' %}" style="position:absolute; top:15px; right:20px; 
+          background-color:green; color:white; 
+          padding:8px 15px; border-radius:5px; 
+          text-decoration:none; font-weight:bold;">
+        Back
+    </a>
+    <div class="form-container">
+        <h2>Edit Job</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <label for="title">Title</label>
+            <input type="text" id="title" name="title" value="{{ job.title }}" required>
+
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="4" required>{{ job.description }}</textarea>
+
+            <label for="tech_stack">Tech Stack</label>
+            <input type="text" id="tech_stack" name="tech_stack" value="{{ job.tech_stack }}" required>
+
+            <label for="pay_per_hour">Pay per hour</label>
+            <input type="number" id="pay_per_hour" name="pay_per_hour" value="{{ job.pay_per_hour }}" required>
+
+            <label for="requirements">Requirements</label>
+            <textarea id="requirements" name="requirements" rows="3">{{ job.requirements }}</textarea>
+
+            <button type="submit">Update Job</button>
+        </form>
+
+    </div>
+</body>
+
+</html>

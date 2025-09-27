@@ -5,24 +5,201 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ client.first_name }}'s Profile</title>
-    <link rel="stylesheet" href="{% static 'css/client_profile.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        /* ---------- Body & Page ---------- */
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #E0FBE2; /* Soft pastel green background */
+            color: #333;
+        }
+
+        .page-container {
+            max-width: 950px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 30px 35px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        /* ---------- Welcome Tag ---------- */
+        .welcome-tag {
+            text-align: center;
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            padding: 15px 25px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #14a800, #8de38c);
+            color: white;
+            box-shadow: 0 4px 12px rgba(20, 168, 0, 0.5);
+            opacity: 0;
+            animation: slideDown 1s forwards;
+            letter-spacing: 0.5px;
+        }
+
+        @keyframes slideDown {
+            0% {
+                transform: translateY(-40px);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* ---------- Headings ---------- */
+        h2 {
+            text-align: center;
+            color: #14a800;
+            margin-bottom: 25px;
+            font-size: 28px;
+            letter-spacing: 0.5px;
+        }
+
+        /* ---------- Profile Container ---------- */
+        .profile-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        /* Profile Info */
+        .profile-info {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .profile-info p {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        .btn-message {
+            display: inline-block;
+            padding: 10px 16px;
+            background-color: #14a800;
+            color: #fff;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            margin-top: 10px;
+        }
+
+        .btn-message:hover {
+            background-color: #0f7a00;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(20, 168, 0, 0.4);
+        }
+
+        /* Profile Picture */
+        .profile-pic {
+            flex-shrink: 0;
+        }
+
+        .profile-pic .pic {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #14a800;
+            box-shadow: 0 6px 15px rgba(20, 168, 0, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .profile-pic .pic:hover {
+            transform: scale(1.07);
+            box-shadow: 0 8px 18px rgba(20, 168, 0, 0.45);
+        }
+
+        /* ---------- Read-only details ---------- */
+        .readonly-block {
+            margin-top: 20px;
+            padding: 25px 25px;
+            border-radius: 15px;
+            background: #f0fff4;
+            border-left: 6px solid #14a800;
+            box-shadow: 0 6px 18px rgba(20, 168, 0, 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .readonly-block:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(20, 168, 0, 0.2);
+        }
+
+        .readonly-block p {
+            font-size: 15px;
+            margin: 10px 0;
+        }
+
+        /* Add icons for better realism */
+        .readonly-block i {
+            color: #14a800;
+            margin-right: 8px;
+        }
+
+        /* Back Button */
+        .update-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 16px;
+            background-color: #14a800;
+            color: #fff;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .update-btn:hover {
+            background-color: #0f7a00;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(20, 168, 0, 0.4);
+        }
+    </style>
 </head>
 
 <body>
     <div class="page-container">
+        <!-- Welcome Tag -->
+        <div class="welcome-tag">Welcome, {{ client.first_name }}!</div>
+
+        <!-- Page Heading -->
         <h2>Client Profile</h2>
 
+        <!-- Profile Info & Picture -->
         <div class="profile-container">
-            <!-- Left: Info -->
             <div class="profile-info">
                 <p><strong>Name:</strong> {{ client.first_name }} {{ client.last_name }}</p>
                 <p><strong>Email:</strong> {{ client.email }}</p>
                 <p><strong>Mobile:</strong> {{ client.mobile_number }}</p>
-                <a href="{% url 'chat_view' 'client' client.id %}" class="btn-message">Messages</a>
+                <a href="{% url 'chat_view' 'client' client.id %}" class="btn-message">
+                    <i class="fa-solid fa-message"></i> Messages
+                </a>
             </div>
 
-            <!-- Profile Picture -->
             <div class="profile-pic">
                 <img src="{% if profile.profile_picture %}{{ profile.profile_picture.url }}{% else %}{% static 'images/default.png' %}{% endif %}"
                     alt="Profile Picture" class="pic">
@@ -31,17 +208,16 @@
 
         <hr>
 
-        <!-- Read-Only Profile Details -->
+        <!-- Read-Only Details -->
         <div class="readonly-block">
-            <p><strong>Bio:</strong> {{ profile.about }}</p>
-            <p><strong>Company:</strong> {{ profile.company_name }}</p>
-            <p><strong>Industry:</strong> {{ profile.industry }}</p>
-            <p><strong>Requirements:</strong> {{ profile.requirements }}</p>
-            <p><strong>Budget:</strong> {{ profile.budget }}</p>
-            <p><strong>Location:</strong> {{ profile.location }}</p>
+            <p><i class="fa-solid fa-user"></i> <strong>Bio:</strong> {{ profile.about }}</p>
+            <p><i class="fa-solid fa-building"></i> <strong>Company:</strong> {{ profile.company_name }}</p>
+            <p><i class="fa-solid fa-industry"></i> <strong>Industry:</strong> {{ profile.industry }}</p>
+            <p><i class="fa-solid fa-list-check"></i> <strong>Requirements:</strong> {{ profile.requirements }}</p>
+            <p><i class="fa-solid fa-coins"></i> <strong>Budget:</strong> {{ profile.budget }}</p>
+            <p><i class="fa-solid fa-location-dot"></i> <strong>Location:</strong> {{ profile.location }}</p>
 
-            <a href="{% url 'freelancerHome' %}" class="update-btn"
-                style="text-decoration: none; float: right;">Back</a>
+            <a href="{% url 'freelancerHome' %}" class="update-btn" style="float: right;">Back</a>
         </div>
     </div>
 </body>

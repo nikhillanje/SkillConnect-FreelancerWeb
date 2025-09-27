@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Career Tools</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #00b140, #14a800);
+            color: white;
+            text-align: center;
+            padding: 50px 20px;
+            border-radius: 0 0 15px 15px;
+        }
+
+        .header h2 {
+            margin: 0;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .header p {
+            margin-top: 12px;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #eafaea;
+        }
+
+        /* Back Button */
+        .back-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: #00b140;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #0d7d35;
+        }
+
+        /* Main Cards */
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0px 8px 22px rgba(0, 0, 0, 0.15);
+            border-color: #14a800;
+        }
+
+        .card i {
+            font-size: 38px;
+            margin-bottom: 15px;
+            display: block;
+            color: #14a800;
+        }
+
+        .card h4 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #222;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: #555;
+        }
+
+        /* Navigation */
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 25px;
+            padding: 18px 20px;
+            background: #f7fdf9;
+            border-radius: 12px;
+            max-width: 900px;
+            margin: 30px auto;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #444;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-item i {
+            font-size: 15px;
+        }
+
+        .nav-item:hover {
+            color: #0d7d35;
+            background: #e6f5ec;
+        }
+
+        .nav-item.active {
+            background: #dffae9;
+            color: #0d7d35;
+            font-weight: 600;
+            border: 1px solid #14a800;
+        }
+
+        /* Job Recommendation Section */
+        .job-recommendation {
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .job-card {
+            background: white;
+            border-radius: 14px;
+            text-align: center;
+            padding: 40px 30px;
+            box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        .job-icon {
+            width: 75px;
+            height: 75px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            background: #e6f8ec;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .job-icon i {
+            font-size: 38px;
+            color: #14a800;
+        }
+
+        .job-card h3 {
+            margin-bottom: 10px;
+            font-size: 22px;
+            color: #222;
+        }
+
+        .job-card p {
+            font-size: 15px;
+            color: #555;
+            margin-bottom: 25px;
+        }
+
+        .generate-btn {
+            background: #14a800;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .generate-btn:hover {
+            background: #0d7d35;
+        }
+
+        .job-card small {
+            display: block;
+            margin-top: 15px;
+            color: #777;
+            font-size: 12px;
+        }
+
+        /* Recommendations Styling */
+        .recommendations {
+            margin-top: 25px;
+            text-align: left;
+        }
+
+        .recommendations h4 {
+            margin-bottom: 15px;
+            color: #0d7d35;
+        }
+
+        .job-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .job-list li {
+            background: #f8fef9;
+            border: 1px solid #d8f5e1;
+            padding: 12px 15px;
+            margin-bottom: 12px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .job-list li:hover {
+            background: #eafbea;
+            border-color: #14a800;
+        }
+
+        .job-list strong {
+            color: #222;
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #555;
+        }
+
+        .spinner {
+            width: 18px;
+            height: 18px;
+            border: 3px solid #ddd;
+            border-top: 3px solid #14a800;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Section visibility */
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* Interview & Resume Sections */
+        .interview-container {
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .interview-card {
+            background: white;
+            border-radius: 14px;
+            padding: 35px 30px;
+            box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        .interview-card h3 {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: #222;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .interview-card p {
+            font-size: 15px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .interview-card textarea {
+            width: 100%;
+            min-height: 120px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            resize: vertical;
+            outline: none;
+            transition: border 0.3s ease;
+        }
+
+        .interview-card textarea:focus {
+            border-color: #14a800;
+            box-shadow: 0px 0px 4px rgba(20, 168, 0, 0.3);
+        }
+
+        .interview-btn {
+            background: #14a800;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background 0.3s;
+            width: 100%;
+            font-weight: 500;
+        }
+
+        .interview-btn:hover {
+            background: #0d7d35;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="{% url 'freelancerHome' %}" class="back-btn">Back</a>
+
+    <div class="header">
+        <h2>⚡ AI-Powered Career Tools</h2>
+        <p>
+            Leverage artificial intelligence to enhance your job search and career development.<br>
+            Get personalized recommendations, interview preparation, skill gap analysis, and career path guidance.
+        </p>
+    </div>
+
+    <!-- Cards Section -->
+    <div class="container">
+        <div class="card" data-target="jobs">
+            <i class="material-icons">work_outline</i>
+            <h4>Job Recommendations</h4>
+            <p>Personalized job matches based on your skills</p>
+        </div>
+        <div class="card" data-target="interview">
+            <i class="material-icons">question_answer</i>
+            <h4>Interview Prep</h4>
+            <p>Custom interview questions for any role</p>
+        </div>
+        <div class="card" data-target="resume">
+            <i class="material-icons">description</i>
+            <h4>Resume Analyzer</h4>
+            <p>ATS score and optimization suggestions</p>
+        </div>
+    </div>
+
+    <!-- Navigation Section -->
+    <div class="nav-container">
+        <span class="nav-item active" data-target="jobs"><i class="fa-regular fa-file"></i> Job Recommendations</span>
+        <span class="nav-item" data-target="interview"><i class="fa-regular fa-circle-question"></i> Interview
+            Questions</span>
+        <span class="nav-item" data-target="resume"><i class="fa-regular fa-gem"></i> Resume Analyzer</span>
+    </div>
+
+    <!-- Job Recommendation Section -->
+    <div id="jobs" class="section active">
+        <div class="job-recommendation">
+            <div class="job-card">
+                <div class="job-icon">
+                    <i class="material-icons">gps_fixed</i>
+                </div>
+                <h3>Personalized Job Matches</h3>
+                <p>Get AI-powered job recommendations tailored to your skills and experience.</p>
+                <button class="generate-btn" id="generate-recommendations-btn">⚡ Generate Recommendations</button>
+                <small>Powered by Groq AI for fast, accurate recommendations.</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interview Questions Section -->
+    <div id="interview" class="section">
+        <div class="interview-container">
+            <div class="interview-card">
+                <h3><i class="fa-regular fa-circle-question"></i> AI Interview Questions Generator</h3>
+                <p>Enter a job description to generate personalized interview questions tailored to the role and your
+                    profile.</p>
+                <textarea placeholder="Paste the job description here..."></textarea>
+                <button class="interview-btn">⚡ Generate Interview Questions</button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Resume Analyzer Section -->
+    <div id="resume" class="section">
+        <div class="interview-container">
+            <div class="interview-card">
+                <h3><i class="fa-regular fa-gem"></i> Resume Analyzer</h3>
+                <p>Upload your resume to receive ATS compatibility, keyword match, and optimization tips.</p>
+                <input type="file" id="resume-upload" accept=".pdf,.doc,.docx" style="margin-bottom: 20px;" />
+                <button class="interview-btn" id="analyze-resume-btn">⚡ Analyze Resume</button>
+                <div id="file-info" style="margin-top: 20px; font-size: 14px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const navItems = document.querySelectorAll('.nav-item');
+            const sections = document.querySelectorAll('.section');
+            const cards = document.querySelectorAll('.card');
+
+            function activateSection(target) {
+                navItems.forEach(nav => nav.classList.remove('active'));
+                document.querySelector(`.nav-item[data-target="${target}"]`)?.classList.add('active');
+
+                sections.forEach(sec => sec.classList.remove('active'));
+                document.getElementById(target)?.classList.add('active');
+            }
+
+            navItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    activateSection(item.getAttribute('data-target'));
+                });
+            });
+
+            cards.forEach(card => {
+                card.addEventListener('click', () => {
+                    activateSection(card.getAttribute('data-target'));
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                });
+            });
+
+            // Resume Analyzer
+            const resumeInput = document.getElementById("resume-upload");
+            const analyzeBtn = document.getElementById("analyze-resume-btn");
+            const fileInfo = document.getElementById("file-info");
+
+            analyzeBtn.addEventListener("click", () => {
+                const file = resumeInput.files[0];
+                if (!file) {
+                    fileInfo.innerHTML = "<span style='color: red;'>⚠️ Please upload a resume file before analyzing.</span>";
+                    return;
+                }
+
+                fileInfo.innerHTML = "⏳ Analyzing resume...";
+
+                const formData = new FormData();
+                formData.append("resume", file);
+
+                fetch("/analyze-resume/", {
+                    method: "POST",
+                    body: formData
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.error) {
+                            fileInfo.innerHTML = `<span style="color:red;">⚠️ ${data.error}</span>`;
+                            return;
+                        }
+
+                        // Clean response: remove '#' and '*'
+                        let cleanAnalysis = data.analysis.replace(/[#*]/g, '');
+
+                        // Display structured resume analysis
+                        fileInfo.innerHTML = `
+                            ✅ <strong>${data.resume_name}</strong> analyzed successfully.<br><br>
+                            <hr style="margin: 15px 0;">
+                            <h4 style="color: #14a800; margin-top: 10px;">📊 Resume Analysis Result:</h4>
+                            <div style="padding-left: 20px; color: #555; white-space: pre-wrap;">
+                                ${cleanAnalysis}
+                            </div>
+                        `;
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        fileInfo.innerHTML = `<span style="color:red;">⚠️ Failed to analyze resume.</span>`;
+                    });
+            });
+
+            // Interview Questions
+            const interviewBtn = document.querySelector("#interview .interview-btn");
+            interviewBtn.addEventListener("click", () => {
+                const textarea = document.querySelector("#interview textarea");
+                const jobDescription = textarea.value.trim();
+                const card = document.querySelector("#interview .interview-card");
+
+                card.querySelector(".recommendations")?.remove();
+
+                if (!jobDescription) {
+                    alert("⚠️ Please paste a job description first.");
+                    return;
+                }
+
+                let html = `
+                    <div class="recommendations">
+                        <h4>🤖 AI-Generated Interview Questions</h4>
+                        <div class="loading-spinner">
+                            <div class="spinner"></div>
+                            <span>Generating questions...</span>
+                        </div>
+                    </div>`;
+                card.insertAdjacentHTML("beforeend", html);
+
+                fetch("/generate-interview-questions/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-Requested-With": "XMLHttpRequest"
+                    },
+                    body: JSON.stringify({ job_description: jobDescription })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        const recDiv = card.querySelector(".recommendations");
+                        if (data.error) {
+                            recDiv.innerHTML = `<p style="color:red;">⚠️ ${data.error}</p>`;
+                            return;
+                        }
+                        let html = "<h4>🤖 AI-Generated Interview Questions</h4><ul class='job-list'>";
+                        data.questions.forEach(q => {
+                            html += `<li>${q}</li>`;
+                        });
+                        html += "</ul>";
+                        recDiv.innerHTML = html;
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                        const recDiv = card.querySelector(".recommendations");
+                        recDiv.innerHTML = "<p style='color:red;'>⚠️ Failed to generate questions.</p>";
+                    });
+            });
+
+            // Job Recommendations
+            document.getElementById("generate-recommendations-btn").addEventListener("click", function () {
+                const jobCard = document.querySelector(".job-card");
+                jobCard.querySelector(".recommendations")?.remove();
+
+                let html = `
+                    <div class="recommendations">
+                        <h4>🎯 Recommended Jobs</h4>
+                        <div class="loading-spinner">
+                            <div class="spinner"></div>
+                            <span>Fetching recommendations...</span>
+                        </div>
+                    </div>`;
+                jobCard.insertAdjacentHTML("beforeend", html);
+
+                setTimeout(() => {
+                    fetch("/freelancer/recommendations/", {
+                        method: "GET",
+                        headers: { "X-Requested-With": "XMLHttpRequest" }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            const recommendationsDiv = jobCard.querySelector(".recommendations");
+                            let html = `<h4>🎯 Recommended Jobs</h4><ul class="job-list">`;
+                            if (!data.recommended_jobs || data.recommended_jobs.length === 0) {
+                                html += "<li>No matching jobs found.</li>";
+                            } else {
+                                data.recommended_jobs.forEach(job => {
+                                    html += `<li><strong>${job.title}</strong><br><small>${job.description}</small></li>`;
+                                });
+                            }
+                            html += "</ul>";
+                            recommendationsDiv.innerHTML = html;
+                        })
+                        .catch(error => {
+                            console.error("Error fetching recommendations:", error);
+                            const recommendationsDiv = jobCard.querySelector(".recommendations");
+                            recommendationsDiv.innerHTML = "<p style='color:red;'>⚠️ Error loading jobs.</p>";
+                        });
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+
+</html>

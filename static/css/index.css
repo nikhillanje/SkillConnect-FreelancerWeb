@@ -659,3 +659,31 @@ h1 {
     color: #333;
     /* optional: better text contrast */
 }
+
+.faq-item {
+    position: relative;
+    padding: 8px 0;
+}
+
+.faq-toggle {
+    float: right;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.faq-item.active .faq-toggle {
+    transform: rotate(180deg);
+}
+
+
+.faq-answer {
+    display: none;
+    /* hide answers initially */
+    padding: 10px 0;
+    color: #ccc;
+    font-size: 14px;
+}
+
+.faq-item.active .faq-answer {
+    display: block;
+}

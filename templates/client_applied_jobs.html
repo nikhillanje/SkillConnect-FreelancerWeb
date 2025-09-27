@@ -3,76 +3,240 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Applied Freelancers - SkillConnect</title>
-    <link rel="stylesheet" href="{% static 'css/client_applied_jobs.css' %}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Applied Freelancers - SkillConnect</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: linear-gradient(135deg, #E0FBE2, #C9FFD5);
+      overflow-x: hidden;
+    }
+
+    h1 {
+      text-align: center;
+      margin: 20px 0;
+      color: #08CB00;
+      animation: fadeInDown 0.8s ease-in-out;
+    }
+
+    .applications-container {
+      width: 95%;
+      max-width: 900px;
+      margin: 0 auto 40px auto;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .applied-card {
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 14px;
+      padding: 0;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      display: flex;
+      flex-direction: column;
+      backdrop-filter: blur(8px);
+      opacity: 0;
+      transform: translateY(40px) scale(0.97);
+      animation: fadeUp 0.8s forwards;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    /* Hover 3D tilt + lift */
+    .applied-card:hover {
+      transform: scale(1.02) rotateX(2deg) rotateY(-2deg);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Animate cards one after another */
+    .applied-card:nth-child(1) { animation-delay: 0.1s; }
+    .applied-card:nth-child(2) { animation-delay: 0.3s; }
+    .applied-card:nth-child(3) { animation-delay: 0.5s; }
+    .applied-card:nth-child(4) { animation-delay: 0.7s; }
+    .applied-card:nth-child(5) { animation-delay: 0.9s; }
+
+    .card-header {
+      background: linear-gradient(135deg, #08CB00, #06a000);
+      color: white;
+      padding: 12px 20px;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .card-body {
+      padding: 18px 20px;
+    }
+
+    .applied-card p {
+      margin: 6px 0;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .status {
+      font-weight: bold;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      display: inline-block;
+      margin-top: 5px;
+      color: #fff;
+      transition: all 0.3s ease;
+    }
+
+    .status.pending { background-color: #FFD166; color: #333; }
+    .status.hired { background-color: #34C759; }
+    .status.rejected { background-color: #B0EBB4; color: #333; } /* ✅ Changed */
+    .status.shortlisted { background-color: #A2E935; color: #333; }
+    .status.interview { background-color: #00B894; }
+
+    /* Buttons */
+    .button-group {
+      display: flex;
+      gap: 12px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+
+    .applied-card a.button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 16px;
+      border-radius: 25px;
+      font-weight: 600;
+      font-size: 13px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+      border: none;
+      cursor: pointer;
+      transform: translateY(0);
+    }
+
+    .applied-card a.button:hover {
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Button colors */
+    .btn-message { background: #08CB00; color: white; }
+    .btn-verified { background: #06a000; color: white; }
+    .btn-shortlisted { background: #A2E935; color: #333; }
+    .btn-interview { background: #00B894; color: white; }
+    .btn-hired { background: #34C759; color: white; }
+    .btn-rejected { background: #B0EBB4; color: #333; } /* ✅ Changed */
+
+    .btn-message:hover { background: #06a000; }
+    .btn-verified:hover { background: #048000; }
+    .btn-shortlisted:hover { background: #8BCB2B; color: white; }
+    .btn-interview:hover { background: #009874; }
+    .btn-hired:hover { background: #28A745; }
+    .btn-rejected:hover { background: #9dd89f; }
+
+    /* Back Button */
+    .back-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #08CB00;
+      color: white;
+      padding: 10px 18px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s ease, transform 0.2s;
+    }
+
+    .back-btn:hover {
+      background: #06a000;
+      transform: scale(1.05);
+    }
+
+    /* Animations */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(40px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media screen and (max-width: 600px) {
+      .card-body {
+        padding: 15px;
+      }
+
+      .button-group {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .applied-card a.button {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  </style>
 </head>
 
 <body>
-    <a href="{% url 'clientHome' %}" style="position:absolute; top:15px; right:20px; 
-          background-color:green; color:white; 
-          padding:8px 15px; border-radius:5px; 
-          text-decoration:none; font-weight:bold;">
-        Back
-    </a>
-    <div class="container">
-        <h1>Freelancers Applied to Your Jobs</h1>
+  <!-- Back Button -->
+  <a href="{% url 'clientHome' %}" class="back-btn">
+    <span class="material-icons" style="vertical-align: middle;">arrow_back</span> Back
+  </a>
 
-        <table class="applied-jobs-table">
-            <thead>
-                <tr>
-                    <th>Job Title</th>
-                    <th>Freelancer Name</th>
-                    <th>Applied At</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for applied in applied_jobs %}
-                <tr>
-                    <td>{{ applied.job.title }}</td>
-                    <td>
-                        <a href="{% url 'freelancer_profile_view' applied.freelancer.id %}"
-                            style="text-decoration: none; color: black; font-weight: normal;">
-                            {{ applied.freelancer.first_name }} {{ applied.freelancer.last_name }}
-                        </a>
+  <h1>Freelancers Applied to Your Jobs</h1>
 
-                    </td>
+  <div class="applications-container">
+    {% if applied_jobs %}
+    {% for applied in applied_jobs %}
+    <div class="applied-card">
+      <div class="card-header">{{ applied.job.title }}</div>
+      <div class="card-body">
+        <p><strong>Freelancer:</strong>
+          <a href="{% url 'freelancer_profile_view' applied.freelancer.id %}" style="text-decoration:none; color:#08CB00;">
+            {{ applied.freelancer.first_name }} {{ applied.freelancer.last_name }}
+          </a>
+        </p>
+        <p><strong>Applied At:</strong> {{ applied.applied_at|date:"d M Y H:i" }}</p>
+        <p><strong>Status:</strong> <span class="status {{ applied.status|lower }}">{{ applied.status }}</span></p>
 
-                    <td>{{ applied.applied_at|date:"d M Y H:i" }}</td>
-                    <td>
-                        <span class="status {{ applied.status|lower }}">{{ applied.status }}</span>
-                    </td>
-                    <td>
-                        {% if applied.status == "Pending" %}
-                        <a href="{% url 'update_application_status' applied.id 'Hired' %}"
-                            class="btn btn-hired">Hired</a>
-                        <a href="{% url 'update_application_status' applied.id 'Rejected' %}"
-                            class="btn btn-rejected">Rejected</a>
-                        {% else %}
-                        <span class="status {{ applied.status|lower }}">{{ applied.status }}</span>
-                        {% endif %}
-
-
-                        <a href="{% url 'client_chat_view' applied.freelancer.id %}"
-                            style="padding:6px 12px; margin-left:50px; background-color:#1d72b8; color:white; text-decoration:none; border-radius:4px; font-size:14px;">
-                            Message
-                        </a>
-
-
-
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="5" class="no-data">No freelancers have applied yet.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <!-- Action Buttons -->
+        <div class="button-group">
+          <a href="{% url 'client_chat_view' applied.freelancer.id %}" class="button btn-message">
+            <span class="material-icons">chat</span> Message
+          </a>
+          <a href="{% url 'update_application_status' applied.id 'Verified' %}" class="button btn-verified">
+            <span class="material-icons">verified</span> Verified
+          </a>
+          <a href="{% url 'update_application_status' applied.id 'Shortlisted' %}" class="button btn-shortlisted">
+            <span class="material-icons">star</span> Shortlist
+          </a>
+          <a href="{% url 'update_application_status' applied.id 'Interview' %}" class="button btn-interview">
+            <span class="material-icons">event</span> Interview
+          </a>
+          <a href="{% url 'update_application_status' applied.id 'Hired' %}" class="button btn-hired">
+            <span class="material-icons">check_circle</span> Hire
+          </a>
+          <a href="{% url 'update_application_status' applied.id 'Rejected' %}" class="button btn-rejected">
+            <span class="material-icons">cancel</span> Reject
+          </a>
+        </div>
+      </div>
     </div>
+    {% endfor %}
+    {% else %}
+    <p style="text-align:center; margin-top:20px; color:#555;">No freelancers have applied yet.</p>
+    {% endif %}
+  </div>
 </body>
 
 </html>

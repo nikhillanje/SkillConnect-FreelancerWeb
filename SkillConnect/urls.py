@@ -54,6 +54,18 @@ urlpatterns = [
     path('client/your-posted-jobs/', views.client_posted_jobs, name='client_posted_jobs'),
     path('client/delete-job/<int:job_id>/', views.delete_posted_job, name='delete_posted_job'),
     path('freelancer/job/<int:job_id>/', views.freelancer_job_detail, name='freelancer_job_detail'),
+    path('client/edit-job/<int:job_id>/', views.edit_posted_job, name='edit_posted_job'),
+    path('feedback/', views.give_feedback, name='give_feedback'),
+    path("client/notifications/", views.notifications_view, name="notifications_view"),
+    path("client/overview/", views.client_overview, name="client_overview"),
+    path('companies/', views.companies_page, name='companies_page'),
+    path('ai-tools/', views.ai_tools, name='ai_tools'),
+    path("freelancer/recommendations/", views.job_recommendations, name="job_recommendations"),
+    path("generate-interview-questions/", views.generate_interview_questions, name="generate_interview_questions"),
+    path('analyze-resume/', views.analyze_resume, name='analyze_resume'),
+    path('help-support/', views.help_support, name='help_support'),
+
+
 ]
 
 if settings.DEBUG:

@@ -1,5 +1,8 @@
 from django import forms
 from .models import FreelancerLogin,ClientLogin,FreelancerInfo,ClientInfo,PostedJobs,AppliedJobs
+from django import forms
+from .models import Feedback, FreelancerLogin
+
 
 class FreelancerForm(forms.ModelForm):
     re_enter_password = forms.CharField(
@@ -110,4 +113,19 @@ class AppliedJobsForm(forms.ModelForm):
                 ('Approved', 'Approved'),
                 ('Rejected', 'Rejected'),
             ])
+        }
+
+
+
+
+
+class FeedbackForm(forms.ModelForm):
+    class Meta:
+        model = Feedback
+        fields = ['category', 'freelancer', 'feedback_text', 'rating']
+        widgets = {
+            'category': forms.Select(attrs={'class': 'form-control'}),
+            'freelancer': forms.Select(attrs={'class': 'form-control'}),
+            'feedback_text': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+            'rating': forms.NumberInput(attrs={'class': 'form-control', 'min': 1, 'max': 5}),
         }

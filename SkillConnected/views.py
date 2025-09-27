@@ -1,28 +1,64 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.hashers import make_password, check_password
-from .models import FreelancerLogin, ClientLogin, FreelancerInfo , ClientInfo,PostedJobs ,AppliedJobs, Chat
-from .forms import FreelancerForm, ClientForm, FreelancerInfoForm , ClientInfoForm,PostedJobsForm  
+from django.http import JsonResponse
+from django.core.mail import send_mail
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect, get_object_or_404
-from functools import wraps
-from django.shortcuts import redirect
-from django.shortcuts import redirect
-from decimal import Decimal, InvalidOperation
+from django.contrib.auth.hashers import make_password, check_password
+from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.contrib import messages
-import random
-import json
-from django.shortcuts import render, get_object_or_404
-from .models import Chat, ClientLogin, FreelancerLogin
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.conf import settings
-from twilio.rest import Client
-from datetime import datetime, timedelta
 from django.utils import timezone
+
+from functools import wraps
+from decimal import Decimal, InvalidOperation
+from datetime import datetime, timedelta
+import json
+import random
+
+from twilio.rest import Client
+import google.generativeai as genai
+
+
+from .models import PostedJobs  
+from django.http import JsonResponse
+import json
+import google.generativeai as genai
+
+from django.conf import settings
+import google.generativeai as genai
+
+
+
+# views.py
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import google.generativeai as genai
+import pdfplumber
+import docx
+
+
+from . import models
+from .models import (
+    Company,
+    FreelancerLogin,
+    ClientLogin,
+    FreelancerInfo,
+    ClientInfo,
+    PostedJobs,
+    AppliedJobs,
+    Chat,
+    Feedback,
+)
+from .forms import (
+    FreelancerForm,
+    ClientForm,
+    FreelancerInfoForm,
+    ClientInfoForm,
+    PostedJobsForm,
+    FeedbackForm,
+)
+
+
 
 
 def login_required_custom(user_type=None):
@@ -48,7 +84,13 @@ def login_required_custom(user_type=None):
 
 
 def index(request):
-    return render(request, 'index.html')
+    feedbacks = Feedback.objects.all().order_by('-rating', '-created_at')[:3]
+    return render(request, "index.html", {
+        "feedbacks": feedbacks,
+        "stars_range": range(1, 6), 
+    })
+
+
 
 
 
@@ -56,37 +98,35 @@ def role(request):
     return render(request, 'role.html')
 
 
+
+
 def freelancer_Signup(request):
     if request.method == 'POST':
         form = FreelancerForm(request.POST, request.FILES)
-
         if form.is_valid():
-            email = form.cleaned_data['email']
+            email = form.cleaned_data['email'].lower().strip()
 
-            # Check if email already exists
+
             if FreelancerLogin.objects.filter(email=email).exists():
                 messages.error(request, "Email already exists!")
-                return redirect('freelancer_Signup')  # redirect instead of render
+                return redirect('freelancer_Signup')
 
-            # Save freelancer with hashed password
+
             freelancer = form.save(commit=False)
             freelancer.password = make_password(form.cleaned_data['password'])
             freelancer.save()
 
-            messages.success(request, "Account created successfully! Please Wait For Admin Approval.")
+            messages.success(request, "Account created successfully! Please wait for admin approval.")
             return redirect('login')
-
         else:
-            # Invalid form
             for field, errors in form.errors.items():
                 for error in errors:
                     messages.error(request, f"{field}: {error}")
-            return redirect('freelancer_Signup')  # redirect
-
+            return redirect('freelancer_Signup')
     else:
         form = FreelancerForm()
-
     return render(request, 'freelancer_signup.html', {'form': form})
+
 
 
 
@@ -95,38 +135,27 @@ def freelancer_Signup(request):
 def client_Signup(request):
     if request.method == 'POST':
         form = ClientForm(request.POST, request.FILES)
-
         if form.is_valid():
-            email = form.cleaned_data['email']
+            email = form.cleaned_data['email'].lower().strip()
 
-            # Check if email already exists
             if ClientLogin.objects.filter(email=email).exists():
                 messages.error(request, "Email already exists!")
-                return redirect('client_Signup')  # redirect instead of render
+                return redirect('client_Signup')
 
-            # Save client with hashed password
             client = form.save(commit=False)
             client.password = make_password(form.cleaned_data['password'])
             client.save()
 
-            messages.success(request, "Account created successfully! Please Wait For Admin Approval.")
-            return redirect('login')  # redirect to login page
-
+            messages.success(request, "Account created successfully! Please wait for admin approval.")
+            return redirect('login')
         else:
-            # Invalid form → show field-specific errors
             for field, errors in form.errors.items():
                 for error in errors:
                     messages.error(request, f"{field}: {error}")
-            return redirect('client_Signup')  # redirect instead of render
-
+            return redirect('client_Signup')
     else:
-        # GET request → empty form
         form = ClientForm()
-
     return render(request, 'client_signup.html', {'form': form})
-
-
-
 
 
 def login(request):
@@ -134,10 +163,8 @@ def login(request):
         email = request.POST.get("email").lower().strip()
         password = request.POST.get("password")
 
-        # Always clear old session before new login
-        request.session.flush()
+        request.session.flush()  
 
-        # Check Freelancer
         freelancer = FreelancerLogin.objects.filter(email=email).first()
         if freelancer and check_password(password, freelancer.password):
             if not freelancer.is_approved:
@@ -148,7 +175,6 @@ def login(request):
             request.session['user_name'] = f"{freelancer.first_name} {freelancer.last_name}"
             return redirect("freelancerHome")
 
-        # Check Client
         client = ClientLogin.objects.filter(email=email).first()
         if client and check_password(password, client.password):
             if not client.is_approved:
@@ -181,22 +207,22 @@ def freelancer_home(request):
     pay_sort = request.GET.get("paySort", "")
     tech_sort = request.GET.get("techSort", "")
 
-    # Get all posted jobs (with client relation for efficiency)
+
     posted_jobs = PostedJobs.objects.select_related('client').all()
 
-    # Filter by search query (job title)
+
     if search_query:
         posted_jobs = posted_jobs.filter(title__icontains=search_query)
 
-    # Filter by tech stack (assuming PostedJobs has a 'tech_stack' field)
+
     if tech_sort:
         posted_jobs = posted_jobs.filter(tech_stack__iexact=tech_sort)
 
     # Sort by pay
     if pay_sort == "low-high":
-        posted_jobs = posted_jobs.order_by("pay")
+        posted_jobs = posted_jobs.order_by("pay_per_hour")
     elif pay_sort == "high-low":
-        posted_jobs = posted_jobs.order_by("-pay")
+        posted_jobs = posted_jobs.order_by("-pay_per_hour")
     else:
         posted_jobs = posted_jobs.order_by("-created_at")  # default
 
@@ -215,9 +241,17 @@ def freelancer_home(request):
             "client": client,
             "client_full_name": f"{client.first_name} {client.last_name}",
             "profile_picture": client_info.profile_picture if client_info else None,
-            "client_name": client_info.company_name if client_info else "",
+            "company_name": client_info.company_name if client_info else "",
+            "company_url": client_info.company_url if client_info else "",
         })
 
+    # -------------------------------
+    # Get all companies that have posted jobs
+    # -------------------------------
+    client_ids_with_jobs = posted_jobs.values_list('client_id', flat=True).distinct()
+    companies = ClientInfo.objects.filter(client_id__in=client_ids_with_jobs).values(
+        'company_name', 'company_url'
+    ).distinct()
     return render(request, "freelancer_home.html", {
         "name": user_name,
         "user_id": user_id,
@@ -228,6 +262,7 @@ def freelancer_home(request):
         "search_query": search_query,
         "pay_sort": pay_sort,
         "tech_sort": tech_sort,
+        "companies": companies,   # <-- add this for Companies button/section
     })
 
 
@@ -274,8 +309,6 @@ def client_home(request):
         "client_id": client_id,
         "client_name": client_name
     })
-
-
 
 
 
@@ -345,7 +378,7 @@ def freelancer_profile_setup(request):
 
 
 @login_required_custom(user_type="client")
-def freelancer_profile_setup(request):
+def client_profile_setup(request):
     # Redirect the logged-in freelancer to their profile edit page
     client_id = request.session.get('user_id')
     if not client_id:
@@ -394,9 +427,6 @@ def update_profile_picture(request):
 
 
 
-import json
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def send_otp(request):
@@ -431,75 +461,15 @@ def verify_otp(request):
 
 
 
-# # Temporary OTP storage
-# OTP_STORE = {}
-
-# @csrf_exempt
-# def send_otp(request):
-#     if request.method == "POST":
-#         try:
-#             data = json.loads(request.body.decode("utf-8"))
-#             phone = data.get("phone", "").strip()
-#         except Exception:
-#             return JsonResponse({"success": False, "message": "Invalid request format"}, status=400)
-
-#         # Validate phone
-#         if len(phone) != 10 or not phone.isdigit():
-#             return JsonResponse({"success": False, "message": "Enter a valid 10-digit mobile number."}, status=400)
-
-#         # Check if number exists
-#         if not FreelancerLogin.objects.filter(mobile_number=phone).exists():
-#             return JsonResponse({"success": False, "message": "This mobile number is not registered."}, status=404)
-
-#         phone_full = "+91" + phone
-#         otp = str(random.randint(1000, 9999))
-#         OTP_STORE[phone_full] = otp
-
-#         try:
-#             client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
-#             client.messages.create(
-#                 body=f"Your SkillConnect OTP is: {otp}",
-#                 from_=settings.TWILIO_PHONE_NUMBER,
-#                 to=phone_full
-#             )
-#             return JsonResponse({"success": True, "message": f"OTP sent to ****{phone[-4:]}"} , status=200)
-#         except Exception as e:
-#             # Fallback: still send JSON error, never HTML
-#             return JsonResponse({"success": False, "message": f"Failed to send OTP: {str(e)}"}, status=500)
-
-#     return JsonResponse({"success": False, "message": "Invalid request method"}, status=405)
-
-
-# @csrf_exempt
-# def verify_otp(request):
-#     if request.method == "POST":
-#         try:
-#             data = json.loads(request.body.decode("utf-8"))
-#             phone = data.get("phone", "").strip()
-#             entered_otp = data.get("otp", "").strip()
-#         except Exception:
-#             return JsonResponse({"success": False, "message": "Invalid request format"}, status=400)
-
-#         phone_full = "+91" + phone
-
-#         if OTP_STORE.get(phone_full) == entered_otp:
-#             OTP_STORE.pop(phone_full)
-#             request.session["otp_verified"] = True
-#             request.session["verified_phone"] = phone_full
-#             return JsonResponse({"success": True, "message": "OTP verified successfully!"}, status=200)
-#         else:
-#             return JsonResponse({"success": False, "message": "Invalid OTP"}, status=400)
-
-#     return JsonResponse({"success": False, "message": "Invalid request method"}, status=405)
-
-
-
 
 @login_required_custom(user_type="client")
 def post_job(request, client_id):
     client = get_object_or_404(ClientLogin, id=client_id)
     error_message = None
-    form_data = {}  # to keep values in case of error
+    form_data = {}
+
+    # Get all companies to show in the form dropdown
+    companies = Company.objects.all()
 
     if request.method == "POST":
         title = request.POST.get('title', '').strip()
@@ -507,11 +477,11 @@ def post_job(request, client_id):
         pay_per_hour_str = request.POST.get('pay_per_hour', '').strip()
         tech_stack = request.POST.get('tech_stack', '').strip()
         requirements = request.POST.get('requirements', '').strip()
+        job_image = request.FILES.get('job_image')  # uploaded image
 
-        # Keep data to refill form in case of error
         form_data = {
             'title': title,
-            'description' : description,
+            'description': description,
             'pay_per_hour': pay_per_hour_str,
             'tech_stack': tech_stack,
             'requirements': requirements
@@ -524,28 +494,39 @@ def post_job(request, client_id):
                 raise InvalidOperation
         except (InvalidOperation, ValueError):
             error_message = "Pay per hour must be a valid positive number."
-            return render(request, "postJob.html", {"client": client, "error": error_message, "form_data": form_data})
+            return render(request, "postJob.html", {
+                "client": client, "error": error_message,
+                "form_data": form_data, "companies": companies
+            })
 
-        # Check all fields
-        if not all([title, description,tech_stack, requirements]):
+        # Check all required fields
+        if not all([title, description, tech_stack, requirements]):
             error_message = "All fields are required."
-            return render(request, "postJob.html", {"client": client, "error": error_message, "form_data": form_data})
+            return render(request, "postJob.html", {
+                "client": client, "error": error_message,
+                "form_data": form_data, "companies": companies
+            })
 
         # Save the job
-        PostedJobs.objects.create(
+        job = PostedJobs.objects.create(
             client=client,
             title=title,
             description=description,
             pay_per_hour=pay_per_hour,
             tech_stack=tech_stack,
-            requirements=requirements
+            requirements=requirements,
+            job_image=job_image
         )
-        return redirect('clientHome')  # redirect after success
+
+        messages.success(request, "Job posted successfully!")
+        return redirect('client_posted_jobs')  # Redirect to your posted jobs page
 
     # GET request
-    return render(request, "postJob.html", {"client": client, "form_data": form_data})
+    return render(request, "postJob.html", {
+        "client": client, "form_data": form_data, "companies": companies
+    })
 
-
+    
 
 @login_required_custom(user_type="freelancer")
 def apply_job(request, job_id):
@@ -593,20 +574,162 @@ def client_applied_jobs(request):
     })
 
 
+
+
+from .models import Notification  # make sure to import your Notification model
+
+@login_required_custom(user_type="freelancer")
+def apply_job(request, job_id):
+    # Ensure user is logged in as freelancer
+    if 'user_type' not in request.session or request.session['user_type'] != "freelancer":
+        messages.error(request, "Only freelancers can apply for jobs. Please login as a freelancer.")
+        return redirect("login")
+
+    freelancer_id = request.session.get("user_id")
+    freelancer = get_object_or_404(FreelancerLogin, id=freelancer_id)
+
+    job = get_object_or_404(PostedJobs, id=job_id)
+
+    # Check if already applied
+    if AppliedJobs.objects.filter(job=job, freelancer=freelancer).exists():
+        messages.warning(request, "You have already applied for this job.")
+        return redirect("freelancerHome")
+
+    # Save new application
+    AppliedJobs.objects.create(
+        job=job,
+        freelancer=freelancer,
+        applied_at=timezone.now(),
+        status="Pending"
+    )
+
+    # 🔔 Create notification for the client
+    Notification.objects.create(
+        client=job.client,
+        freelancer=freelancer,
+        job=job,
+        message=f"{freelancer.first_name} {freelancer.last_name} applied for your job '{job.title}'."
+    )
+
+    messages.success(request, f"You have successfully applied for {job.title}.")
+    return redirect("freelancerHome")
+
+
+
+
+@login_required_custom(user_type="client")
+def client_applied_jobs(request):
+    client_id = request.session.get("user_id")
+    client = get_object_or_404(ClientLogin, id=client_id)
+
+    # Get all jobs posted by this client
+    jobs = PostedJobs.objects.filter(client=client)
+
+    # Get all applications for these jobs
+    applied_jobs = AppliedJobs.objects.filter(job__in=jobs).select_related('freelancer', 'job').order_by('-applied_at')
+
+    return render(request, "client_applied_jobs.html", {
+        "applied_jobs": applied_jobs
+    })
+
+
+
 @login_required_custom(user_type="client")
 def update_application_status(request, applied_job_id, status):
     applied_job = get_object_or_404(AppliedJobs, id=applied_job_id)
-    
+
     # Only allow updating if the client owns the job
     if applied_job.job.client.id != request.session.get("user_id"):
         messages.error(request, "You are not allowed to update this application.")
         return redirect("client_applied_jobs")
 
-    if status in ["Hired", "Rejected"]:
+    # Allowed statuses
+    valid_statuses = ["Hired", "Rejected", "Verified", "Shortlisted", "Interview"]
+
+    if status in valid_statuses:
         applied_job.status = status
         applied_job.save()
-        messages.success(request, f"{applied_job.freelancer.first_name} marked as {status}.")
+
+        # Get freelancer and client info
+        freelancer = applied_job.freelancer
+        client = applied_job.job.client
+        job = applied_job.job
+
+        # Prepare email details
+        subject = ""
+        message = ""
+
+        if status == "Hired":
+            subject = f"Congratulations {freelancer.first_name}, You are Hired!"
+            message = (
+                f"Dear {freelancer.first_name},\n\n"
+                f"🎉 Congratulations! You have been hired for the job '{job.title}'.\n\n"
+                f"Client: {client.first_name} {client.last_name}\n"
+                f"Job Description: {job.description}\n"
+                f"Pay Per Hour: ₹{job.pay_per_hour}\n\n"
+                f"The client will contact you soon with further details.\n\n"
+                f"Best of Luck!\nSkillConnect Team"
+            )
+
+        elif status == "Rejected":
+            subject = f"Application Update for {job.title}"
+            message = (
+                f"Dear {freelancer.first_name},\n\n"
+                f"We appreciate your interest in the job '{job.title}'.\n"
+                f"Unfortunately, you were not selected this time.\n\n"
+                f"Don't be discouraged — keep applying to more opportunities on SkillConnect.\n\n"
+                f"Best Wishes,\nSkillConnect Team"
+            )
+
+        elif status == "Verified":
+            subject = f"Application Verified for {job.title}"
+            message = (
+                f"Dear {freelancer.first_name},\n\n"
+                f"✅ Your application for the job '{job.title}' has been verified successfully.\n\n"
+                f"The client {client.first_name} {client.last_name} will review your profile soon.\n\n"
+                f"Stay tuned for further updates!\n\n"
+                f"Best,\nSkillConnect Team"
+            )
+
+        elif status == "Shortlisted":
+            subject = f"You Have Been Shortlisted for {job.title}"
+            message = (
+                f"Dear {freelancer.first_name},\n\n"
+                f"📌 Congratulations! You have been shortlisted for the job '{job.title}'.\n\n"
+                f"Client: {client.first_name} {client.last_name}\n"
+                f"Next steps will be communicated to you soon.\n\n"
+                f"Good Luck!\nSkillConnect Team"
+            )
+
+        elif status == "Interview":
+            subject = f"Interview Scheduled for {job.title}"
+            message = (
+                f"Dear {freelancer.first_name},\n\n"
+                f"🎤 Great news! You have been invited for an interview for the job '{job.title}'.\n\n"
+                f"Client: {client.first_name} {client.last_name}\n"
+                f"Please check your messages for scheduling details.\n\n"
+                f"Best of Luck!\nSkillConnect Team"
+            )
+
+        # Send email
+        try:
+            send_mail(
+                subject,
+                message,
+                settings.EMAIL_HOST_USER,  # from email
+                [freelancer.email],        # to email
+                fail_silently=False,
+            )
+            messages.success(request, f"Email sent to {freelancer.first_name} ({status}).")
+        except Exception as e:
+            messages.error(request, f"Status updated but email not sent. Error: {str(e)}")
+
+        messages.success(request, f"{freelancer.first_name} marked as {status}.")
+
     return redirect("client_applied_jobs")
+
+
+
 
 
 @login_required_custom(user_type="freelancer")
@@ -624,46 +747,48 @@ def freelancer_notifications(request):
         "hired_jobs": hired_jobs
     })
 
+
 @login_required_custom()
 def chat_view(request, receiver_type, receiver_id):
     user_type = request.session.get("user_type")
     user_id = request.session.get("user_id")
 
-    # Fetch messages
     messages = Chat.objects.filter(
-        (Q(sender_id=user_id, sender_type=user_type, receiver_id=receiver_id, receiver_type=receiver_type) |
-         Q(sender_id=receiver_id, sender_type=receiver_type, receiver_id=user_id, receiver_type=user_type))
+        (Q(sender_type=user_type, sender_id=user_id, receiver_type=receiver_type, receiver_id=receiver_id) |
+         Q(sender_type=receiver_type, sender_id=receiver_id, receiver_type=user_type, receiver_id=user_id))
     ).order_by("timestamp")
 
-    # Determine receiver info dynamically
-    if receiver_type == "client":
-        receiver = get_object_or_404(ClientLogin, id=receiver_id)
-        profile_pic = receiver.clientinfo.profile_picture.url if hasattr(receiver, 'clientinfo') and receiver.clientinfo.profile_picture else '/static/images/default_profile.png'
-        name = f"{receiver.first_name} {receiver.last_name}"
-    else:
-        receiver = get_object_or_404(FreelancerLogin, id=receiver_id)
-        profile_pic = receiver.freelancerinfo.profile_picture.url if hasattr(receiver, 'freelancerinfo') and receiver.freelancerinfo.profile_picture else '/static/images/default_profile.png'
-        name = f"{receiver.first_name} {receiver.last_name}"
+    # Preprocess file type
+    for msg in messages:
+        msg.file_type = None
+        if msg.file:
+            file_url = msg.file.url.lower()
+            if file_url.endswith(".mp4"):
+                msg.file_type = "video"
+            elif file_url.endswith(".jpg") or file_url.endswith(".jpeg") or file_url.endswith(".png"):
+                msg.file_type = "image"
+            else:
+                msg.file_type = "other"
 
     return render(request, "chat.html", {
         "messages": messages,
         "receiver_type": receiver_type,
         "receiver_id": receiver_id,
+        "receiver_name": "Receiver",  # pass actual name here
+        "receiver_profile_pic": "/static/images/default.png",  # pass actual pic here
         "user_type": user_type,
-        "user_id": user_id,
-        "receiver_name": name,
-        "receiver_profile_pic": profile_pic
     })
+
 
 
 @csrf_exempt
 def send_chat_ajax(request):
     if request.method == "POST":
-        sender_type = request.session.get("user_type")     # 'client' or 'freelancer'
+        sender_type = request.session.get("user_type")  # 'client' or 'freelancer'
         sender_id = request.session.get("user_id")
         receiver_type = request.POST.get("receiver_type")
         receiver_id = request.POST.get("receiver_id")
-        message = request.POST.get("message")
+        message = request.POST.get("message", "").strip()
         file = request.FILES.get("file")
 
         if not sender_type or not sender_id:
@@ -674,12 +799,21 @@ def send_chat_ajax(request):
             sender_id=sender_id,
             receiver_type=receiver_type,
             receiver_id=receiver_id,
-            message=message,
+            message=message if message else None,
             file=file,
             timestamp=timezone.now()
         )
-        return JsonResponse({"status": "success", "id": chat.id})
+
+        return JsonResponse({
+            "status": "success",
+            "id": chat.id,
+            "message": chat.message,
+            "file": chat.file.url if chat.file else None,
+            "timestamp": chat.timestamp.strftime("%Y-%m-%d %H:%M:%S"),
+            "sender_type": chat.sender_type
+        })
     return JsonResponse({"error": "Invalid request"}, status=400)
+
 
 def fetch_chat_ajax(request, receiver_type, receiver_id):
     sender_type = request.session.get("user_type")
@@ -832,14 +966,22 @@ def client_profile_view(request, client_id):
     return render(request, 'client_profile_view.html', context)
 
 
+@login_required_custom(user_type="client")
 def client_posted_jobs(request):
     client_id = request.session.get("user_id")
     if not client_id:
-        return redirect("client_login")
+        return redirect("login")
 
-    jobs = PostedJobs.objects.filter(client_id=client_id).order_by('-created_at')
-    context = {"jobs": jobs}
+    client = get_object_or_404(ClientLogin, id=client_id)
+    jobs = PostedJobs.objects.filter(client=client)  # use PostedJobs model
+
+    context = {
+        "jobs": jobs,
+        "client": client, 
+    }
     return render(request, "client_posted_jobs.html", context)
+
+
 
 
 def delete_posted_job(request, job_id):
@@ -847,3 +989,236 @@ def delete_posted_job(request, job_id):
     job = get_object_or_404(PostedJobs, id=job_id, client_id=client_id)
     job.delete()
     return redirect("client_posted_jobs")
+
+@login_required_custom(user_type="client")
+def edit_posted_job(request, job_id):
+    job = get_object_or_404(PostedJobs, id=job_id)
+
+    if request.method == "POST":
+        job.title = request.POST.get("title", job.title)
+        job.description = request.POST.get("description", job.description)
+        job.tech_stack = request.POST.get("tech_stack", job.tech_stack)
+        job.pay_per_hour = request.POST.get("pay_per_hour", job.pay_per_hour)
+        job.requirements = request.POST.get("requirements", job.requirements)
+        job.save()
+
+        return redirect("client_posted_jobs")
+
+    return render(request, "edit_posted_job.html", {"job": job})
+
+@login_required_custom(user_type="client")
+def give_feedback(request):
+    client_id = request.session.get("user_id")
+    client_type = request.session.get("user_type")
+    if not client_id or client_type != "client":
+        return redirect('login')
+
+    client = get_object_or_404(ClientLogin, id=client_id)
+    client_info = ClientInfo.objects.filter(client=client).first()
+
+    if request.method == "POST":
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            feedback = form.save(commit=False)
+            feedback.client = client
+            feedback.client_name = f"{client.first_name} {client.last_name}"
+            if client_info and client_info.profile_picture:
+                feedback.client_profile_pic = client_info.profile_picture
+            feedback.save()
+            messages.success(request, "Thank you for your feedback!")
+            return redirect('clientHome')
+    else:
+        form = FeedbackForm()
+
+    return render(request, "feedback_form.html", {"form": form})
+
+
+def notifications_view(request):
+    client_id = request.session.get("user_id")
+    client = get_object_or_404(ClientLogin, id=client_id)
+
+    # Get latest notifications for this client
+    notifications = Notification.objects.filter(client=client).order_by("-created_at")
+
+    return render(request, "client_notifications.html", {
+        "notifications": notifications
+    })
+
+
+
+
+@login_required_custom(user_type="client")
+def client_overview(request):
+    client_id = request.session.get("user_id")
+    client = get_object_or_404(ClientLogin, id=client_id)
+    client_info = ClientInfo.objects.filter(client=client).first()  # ✅ fetch profile info
+
+    total_jobs = PostedJobs.objects.filter(client=client).count()
+    active_jobs = PostedJobs.objects.filter(client=client, is_active=True).count()
+    proposals = AppliedJobs.objects.filter(job__client=client).count()
+    hires = AppliedJobs.objects.filter(job__client=client, status="Hired").count()
+
+    # Percentages
+    total_jobs_percent = 100
+    active_jobs_percent = (active_jobs / total_jobs) * 100 if total_jobs else 0
+    proposals_percent = (proposals / total_jobs) * 100 if total_jobs else 0
+    hires_percent = (hires / proposals) * 100 if proposals else 0
+
+    context = {
+        "client": client,
+        "client_info": client_info,   # ✅ pass to template
+        "total_jobs": total_jobs,
+        "active_jobs": active_jobs,
+        "proposals": proposals,
+        "hires": hires,
+        "total_jobs_percent": total_jobs_percent,
+        "active_jobs_percent": active_jobs_percent,
+        "proposals_percent": proposals_percent,
+        "hires_percent": hires_percent,
+    }
+
+    return render(request, "client_overview.html", context)
+def companies_page(request):
+    # Fetch all companies
+    companies = ClientInfo.objects.exclude(company_name__isnull=True).exclude(company_name__exact='')
+    context = {
+        'companies': companies
+    }
+    return render(request, 'companies.html', context)
+
+
+def ai_tools(request):
+    return render(request, 'aitools.html')
+
+
+
+
+
+from .models import PostedJobs  # adjust this to your job model
+
+def job_recommendations(request):
+    try:
+        jobs = PostedJobs.objects.all()[:5]  # fetch the latest 5 jobs
+        job_list = [
+            {"title": job.title, "description": job.description[:120] + "..."}
+            for job in jobs
+        ]
+        return JsonResponse({"recommended_jobs": job_list})
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
+
+
+
+
+try:
+    from django.views.decorators.csrf import csrf_exempt
+except Exception:
+    def csrf_exempt(view_func):
+        return view_func
+
+
+
+
+genai.configure(api_key=settings.GEMINI_API_KEY)
+
+
+@csrf_exempt
+def generate_interview_questions(request):
+    if request.method == "POST":
+        try:
+            body = json.loads(request.body)
+            job_description = body.get("job_description", "").strip()
+
+            if not job_description:
+                return JsonResponse({"error": "Job description is required"}, status=400)
+
+            # Use supported Gemini model
+            model = genai.GenerativeModel("gemini-2.5-flash")  # ✅ Updated model
+
+            # Generate content
+            response = model.generate_content(
+                f"Generate 10 interview questions for the following job description:\n\n{job_description}"
+            )
+
+            # Extract questions
+            questions = response.text.split("\n")
+            questions = [q.strip("-• ").strip() for q in questions if q.strip()]
+
+            return JsonResponse({"questions": questions})
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+
+    return JsonResponse({"error": "Invalid request"}, status=405)
+
+
+
+
+genai.configure(api_key=settings.GEMINI_API_KEY)
+
+def extract_text(file):
+    name = file.name.lower()
+    if name.endswith(".pdf"):
+        text = ""
+        with pdfplumber.open(file) as pdf:
+            for page in pdf.pages:
+                text += page.extract_text() + "\n"
+        return text
+    elif name.endswith(".docx"):
+        doc = docx.Document(file)
+        return "\n".join([p.text for p in doc.paragraphs])
+    else:
+        return file.read().decode("utf-8", errors="ignore")
+
+@csrf_exempt
+def analyze_resume(request):
+    if request.method == "POST":
+        resume_file = request.FILES.get("resume")
+        if not resume_file:
+            return JsonResponse({"error": "No resume uploaded"}, status=400)
+
+        try:
+            content = extract_text(resume_file)
+            model = genai.GenerativeModel("gemini-2.5-flash")
+            response = model.generate_content(
+                f"Analyze this resume and provide ATS score, keyword match, highlighted skills, and optimization tips:\n\n{content}"
+            )
+
+            return JsonResponse({
+                "resume_name": resume_file.name,
+                "analysis": response.text
+            })
+
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+
+    return JsonResponse({"error": "Invalid request"}, status=405)
+
+
+
+def help_support(request):
+    context = {}
+    if request.method == "POST":
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        query = request.POST.get('query')
+
+        if name and email and query:
+            subject = f"Support Request from {name}"
+            message = f"Name: {name}\nEmail: {email}\n\nQuery:\n{query}"
+            recipient_list = ['nikhillanje555@gmail.com']  # You can also send to another support email
+
+            try:
+                send_mail(
+                    subject,
+                    message,
+                    settings.EMAIL_HOST_USER,
+                    recipient_list,
+                    fail_silently=False,
+                )
+                context['success'] = "✅ Your query has been sent successfully!"
+            except Exception as e:
+                context['error'] = f"⚠️ Failed to send query. Error: {e}"
+        else:
+            context['error'] = "⚠️ All fields are required."
+
+    return render(request, "help_support.html", context)

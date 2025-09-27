@@ -4,110 +4,150 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat with {{ receiver_name }}</title>
+    <title>Chat</title>
     <link rel="stylesheet" href="{% static 'css/chat.css' %}">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
-
-    <a href="javascript:void(0);" onclick="window.history.back();" style="position:absolute; top:15px; right:20px; 
-          background-color:green; color:white; 
-          padding:8px 15px; border-radius:5px; 
-          text-decoration:none; font-weight:bold;">
-        Back
-    </a>
-
     <div class="chat-wrapper">
+
         <!-- Chat Header -->
         <div class="chat-header">
-            <img src="{{ receiver_profile_pic }}" alt="Profile" class="chat-avatar">
+            <img src="{{ receiver_profile_pic }}" alt="Avatar" class="chat-avatar">
             <div class="chat-name">{{ receiver_name }}</div>
         </div>
 
-        <!-- Messages -->
-        <div id="chat-box" class="chat-box">
+        <!-- Chat Messages -->
+        <div class="chat-box" id="chat-box">
             {% for msg in messages %}
             <div class="chat-message {% if msg.sender_type == user_type %}me{% else %}them{% endif %}">
-                {% if msg.message %}<p>{{ msg.message }}</p>{% endif %}
+                {% if msg.message %}
+                <p>{{ msg.message }}</p>
+                {% endif %}
+
                 {% if msg.file %}
-                {% if ".mp4" in msg.file.url %}
-                <video controls width="200">
-                    <source src="{{ msg.file.url }}">
+                {% if msg.file_type == "video" %}
+                <video controls width="220">
+                    <source src="{{ msg.file.url }}" type="video/mp4">
                 </video>
-                {% elif msg.file.url|lower|endswith:".jpg" or msg.file.url|lower|endswith:".png" or
-                msg.file.url|lower|endswith:".jpeg" %}
-                <img src="{{ msg.file.url }}" width="200">
+                {% elif msg.file_type == "image" %}
+                <img src="{{ msg.file.url }}" width="220" alt="file">
                 {% else %}
-                <a href="{{ msg.file.url }}" target="_blank">{{ msg.file.name }}</a>
+                <a href="{{ msg.file.url }}" target="_blank">{{ msg.file.name|slice:"15" }}</a>
                 {% endif %}
                 {% endif %}
+
                 <span class="time">{{ msg.timestamp|date:"H:i" }}</span>
             </div>
+            {% empty %}
+            <p style="text-align:center; color:#888;">No messages yet. Start chatting!</p>
             {% endfor %}
         </div>
 
-        <!-- Input Box -->
-        <form id="chat-form" enctype="multipart/form-data" class="chat-input">
-            {% csrf_token %}
-            <input type="hidden" name="receiver_type" value="{{ receiver_type }}">
-            <input type="hidden" name="receiver_id" value="{{ receiver_id }}">
-            <input type="text" name="message" placeholder="Type a message..." required>
-            <input type="file" name="file" id="file-input">
-            <button type="submit">Send</button>
-        </form>
+        <!-- File Preview -->
+        <div id="file-preview" style="display:none;"></div>
+
+        <!-- Chat Input -->
+        <div class="chat-input">
+            <!-- File Upload -->
+            <label for="file-input" class="file-label" title="Attach file">
+                📎
+            </label>
+            <input type="file" id="file-input" name="file">
+
+            <!-- Message Input -->
+            <input type="text" id="message-input" placeholder="Type a message...">
+
+            <!-- Send Button -->
+            <button id="send-btn">➤</button>
+        </div>
     </div>
 
     <script>
-        function fetchMessages() {
-            $.get("{% url 'fetch_chat_ajax' receiver_type receiver_id %}", function (data) {
-                $('#chat-box').html('');
-                data.messages.forEach(function (msg) {
-                    let className = msg.sender_type === "{{ user_type }}" ? 'chat-message me' : 'chat-message them';
-                    let fileHtml = '';
-                    if (msg.file) {
-                        if (msg.file.endsWith(".mp4")) {
-                            fileHtml = `<video controls width="200"><source src="${msg.file}"></video>`;
-                        } else if (msg.file.match(/\.(jpg|jpeg|png)$/i)) {
-                            fileHtml = `<img src="${msg.file}" width="200">`;
-                        } else {
-                            fileHtml = `<a href="${msg.file}" target="_blank">${msg.file.split('/').pop()}</a>`;
-                        }
+        const sendBtn = document.getElementById("send-btn");
+        const messageInput = document.getElementById("message-input");
+        const chatBox = document.getElementById("chat-box");
+        const fileInput = document.getElementById("file-input");
+        const filePreview = document.getElementById("file-preview");
+
+        // Auto scroll to bottom on page load
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        // Show selected file preview
+        fileInput.addEventListener("change", function () {
+            filePreview.style.display = "block";
+            const file = this.files[0];
+            if (file) {
+                if (file.type.startsWith("image/")) {
+                    filePreview.innerHTML = `<strong>Selected:</strong> <br><img src="${URL.createObjectURL(file)}">`;
+                } else if (file.type.startsWith("video/")) {
+                    filePreview.innerHTML = `<strong>Selected:</strong> <br><video width="120" controls><source src="${URL.createObjectURL(file)}"></video>`;
+                } else {
+                    filePreview.innerHTML = `<strong>Selected file:</strong> ${file.name}`;
+                }
+            }
+        });
+
+        // Send message function
+        sendBtn.addEventListener("click", function () {
+            sendMessage();
+        });
+
+        messageInput.addEventListener("keypress", function (e) {
+            if (e.key === "Enter") sendMessage();
+        });
+
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            const file = fileInput.files[0];
+
+            if (!message && !file) return; // Don't send empty
+
+            const formData = new FormData();
+            formData.append("message", message);
+            if (file) formData.append("file", file);
+
+            // Include receiver data inside POST body
+            formData.append("receiver_type", "{{ receiver_type }}");
+            formData.append("receiver_id", "{{ receiver_id }}");
+
+            fetch("{% url 'send_chat_ajax' %}", {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        appendMessage(data);
+                        messageInput.value = "";
+                        fileInput.value = "";
+                        filePreview.style.display = "none";
                     }
-                    $('#chat-box').append(`
-                        <div class="${className}">
-                            ${msg.message ? '<p>' + msg.message + '</p>' : ''}
-                            ${fileHtml}
-                            <span class="time">${msg.timestamp.split(' ')[1]}</span>
-                        </div>
-                    `);
                 });
-                $('#chat-box').scrollTop($('#chat-box')[0].scrollHeight);
-            });
         }
 
-        $(document).ready(function () {
-            fetchMessages();
-            setInterval(fetchMessages, 3000); // refresh every 3 sec
-
-            $('#chat-form').submit(function (e) {
-                e.preventDefault();
-                var formData = new FormData(this);
-                $.ajax({
-                    url: "{% url 'send_chat_ajax' %}",
-                    type: "POST",
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function () {
-                        $('#chat-form')[0].reset();
-                        fetchMessages();
-                    }
-                });
-            });
-        });
+        function appendMessage(data) {
+            const div = document.createElement("div");
+            div.className = `chat-message me`;
+            if (data.message) div.innerHTML += `<p>${data.message}</p>`;
+            if (data.file_url) {
+                if (data.file_type === "image") {
+                    div.innerHTML += `<img src="${data.file_url}" width="220">`;
+                } else if (data.file_type === "video") {
+                    div.innerHTML += `<video controls width="220"><source src="${data.file_url}" type="video/mp4"></video>`;
+                } else {
+                    div.innerHTML += `<a href="${data.file_url}" target="_blank">${data.file_name}</a>`;
+                }
+            }
+            div.innerHTML += `<span class="time">${data.timestamp}</span>`;
+            chatBox.appendChild(div);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
     </script>
+
 </body>
 
 </html>
