@@ -1222,3 +1222,16 @@ def help_support(request):
             context['error'] = "⚠️ All fields are required."
 
     return render(request, "help_support.html", context)
+
+
+
+
+from django.http import HttpResponse
+from django.db import connections
+
+def db_check(request):
+    try:
+        connections['default'].cursor()
+        return HttpResponse("✅ Database connected successfully!")
+    except Exception as e:
+        return HttpResponse(f"❌ Database connection failed: {e}")
