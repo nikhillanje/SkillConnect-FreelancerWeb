@@ -18,7 +18,8 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from SkillConnected import views  
+from SkillConnected import views
+from SkillConnected.views import db_check
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -64,7 +65,7 @@ urlpatterns = [
     path("generate-interview-questions/", views.generate_interview_questions, name="generate_interview_questions"),
     path('analyze-resume/', views.analyze_resume, name='analyze_resume'),
     path('help-support/', views.help_support, name='help_support'),
-
+    path('db_check/', db_check),
 
 ]
 
