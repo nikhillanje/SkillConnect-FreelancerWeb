@@ -6,7 +6,7 @@ services:
       pip install -r requirements.txt
       python manage.py migrate --noinput
       python manage.py collectstatic --noinput
-    startCommand: gunicorn SkillConnect.wsgi:application
+    startCommand: gunicorn SkillConnect.wsgi:application --bind 0.0.0.0:$PORT
     envVars:
       - key: DATABASE_URL
         value: postgresql://skillconnect_db_user:fMdyCb5aImIE7MEnQfplKVleuCfUhfXY@dpg-d4cpan0dl3ps73bkr3k0-a/skillconnect_db
