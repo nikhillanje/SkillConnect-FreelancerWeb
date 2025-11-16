@@ -20,7 +20,12 @@ SECRET_KEY = os.getenv("SECRET_KEY", "fallback-secret-key")  # keep fallback for
 DEBUG = False
 
 # Add your Render domain here (and localhost for testing)
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'skillconnect-freelancerweb.onrender.com']
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'skillconnect-freelancerweb-z0pg.onrender.com'
+]
+
 
 # ===============================
 # Application Definition
