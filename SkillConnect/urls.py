@@ -66,7 +66,6 @@ urlpatterns = [
     path('analyze-resume/', views.analyze_resume, name='analyze_resume'),
     path('help-support/', views.help_support, name='help_support'),
     path('db_check/', db_check),
-
 ]
 
 if settings.DEBUG:
