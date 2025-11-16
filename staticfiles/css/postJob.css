@@ -1,0 +1,102 @@
+/* General body styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+/* Container for form */
+.container {
+    position: relative;
+    background-color: #fff;
+    padding: 40px 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    width: 600px;
+}
+
+/* Back button */
+.back-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    text-decoration: none;
+    color: #fff;
+    font-weight: 500;
+    background-color: #14a800;
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.back-btn:hover {
+    background-color: #0f8700;
+}
+
+/* Form heading */
+.container h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #333;
+}
+
+/* Form group */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+/* Labels */
+.form-group label {
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #555;
+}
+
+/* Input and textarea styling */
+.form-group input,
+.form-group textarea {
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+    transition: 0.3s;
+}
+
+/* Focus effect */
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #14a800;
+    box-shadow: 0 0 5px rgba(20, 168, 0, 0.3);
+}
+
+/* Textarea height */
+.form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* Submit button */
+.submit-btn {
+    width: 100%;
+    background-color: #14a800;
+    color: #fff;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* Button hover effect */
+.submit-btn:hover {
+    background-color: #0f8700;
+}

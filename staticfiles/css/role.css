@@ -1,0 +1,100 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    text-align: center;
+}
+
+h1 {
+    font-size: 2em;
+    margin-bottom: 2em;
+}
+
+.selection-cards {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.card {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    width: 250px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card.selected {
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 3px #4CAF50;
+}
+
+button {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1em;
+    cursor: pointer;
+    color: white;
+    background-color: #4CAF50;
+    transition: background-color 0.3s ease;
+}
+
+button.disabled-button {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Login button styling */
+.login-text a {
+    display: inline-block;
+    background-color: #4CAF50;
+    /* Green background */
+    color: white;
+    /* White text */
+    padding: 2.5px 5px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.login-text a:hover {
+    background-color: #45a049;
+    /* Darker green on hover */
+}
+
+/* Back Button (same style as login button) */
+.back-btn {
+    position: absolute;
+    /* Fix it on the left */
+    top: 20px;
+    /* Space from top */
+    left: 20px;
+    /* Space from left */
+    background-color: #4CAF50;
+    /* Same green as login */
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.back-btn:hover {
+    background-color: #45a049;
+    /* Darker green on hover */
+}

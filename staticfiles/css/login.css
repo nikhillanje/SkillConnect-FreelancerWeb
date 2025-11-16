@@ -1,0 +1,126 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: #f7f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.login-container {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    width: 350px;
+    text-align: center;
+}
+
+.upwork-logo {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #14a800;
+}
+
+h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    color: #555;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 12px 12px 40px;
+    box-sizing: border-box;
+    border: 1px solid #e4e4e4;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+.input-group .icon {
+    position: absolute;
+    left: 15px;
+    top: 38px;
+    color: #888;
+}
+
+.continue-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    background-color: #14a800;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.continue-btn:hover {
+    background-color: #108a00;
+}
+
+.or-text {
+    margin: 20px 0;
+    color: #999;
+    font-size: 14px;
+    text-align: center;
+}
+
+.signup-section {
+    margin-top: 30px;
+    border-top: 1px solid #e4e4e4;
+    padding-top: 30px;
+    text-align: center;
+}
+
+.signup-text {
+    color: #5e6d55;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.signup-btn {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #14a800;
+    border-radius: 6px;
+    background-color: transparent;
+    color: #14a800;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.signup-btn:hover {
+    background-color: #e4f9e4;
+}
+
+.upwork-logo {
+    text-decoration: none;
+    /* removes underline */
+    color: #14a800;
+    /* keeps text color same as parent */
+    font-weight: bold;
+    /* make it look like a logo */
+    font-size: 24px;
+    /* adjust size */
+}

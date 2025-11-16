@@ -1,0 +1,127 @@
+.job-detail-container {
+    width: 70%;
+    margin: 30px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f5f5f5;
+}
+
+.client-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.client-pic {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.job-full-info p {
+    margin: 8px 0;
+}
+
+
+/* Container for the job detail */
+.job-detail-container {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 25px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    font-family: Arial, sans-serif;
+}
+
+/* Job title */
+.job-detail-container h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Client info section */
+.client-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.client-pic {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #007BFF;
+}
+
+/* Job info details */
+.job-full-info p {
+    margin: 10px 0;
+    line-height: 1.5;
+    color: #555;
+}
+
+/* Action button container */
+.job-action {
+    text-align: center;
+    margin-top: 30px;
+}
+
+/* I am Interested button */
+.job-action .btn {
+    background-color: #28a745;
+    /* green */
+    color: #fff;
+    padding: 12px 25px;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.job-action .btn:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+.job-action .btn:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.apply-button-container {
+    margin-top: 20px;
+}
+
+.interested-button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+.interested-button:hover {
+    background-color: #45a049;
+}
+
+.already-applied {
+    padding: 10px 20px;
+    background-color: #ccc;
+    color: #666;
+    border: none;
+    cursor: not-allowed;
+    font-size: 16px;
+    border-radius: 5px;
+}

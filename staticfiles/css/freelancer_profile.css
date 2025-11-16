@@ -1,0 +1,241 @@
+/* ---------- Global Styles ---------- */
+body {
+    font-family: "Inter", sans-serif;
+    background: linear-gradient(135deg, #dfe9f3, #ffffff, #eafaf1);
+    padding: 40px 20px;
+    margin: 0;
+    color: #333;
+    min-height: 100vh;
+}
+
+/* ---------- Container ---------- */
+.page-container {
+    max-width: 950px;
+    margin: auto;
+}
+
+/* ---------- Headings ---------- */
+h2 {
+    color: #2a2a2a;
+    font-size: 34px;
+    margin-bottom: 30px;
+    text-align: center;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    position: relative;
+}
+
+h2::after {
+    content: "";
+    display: block;
+    width: 80px;
+    height: 4px;
+    background: #14a800;
+    margin: 10px auto 0;
+    border-radius: 2px;
+}
+
+/* ---------- Profile Section ---------- */
+.profile-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    padding: 30px;
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    margin-bottom: 35px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+.profile-info {
+    font-size: 16px;
+    line-height: 1.8;
+    flex: 1;
+}
+
+.profile-info p {
+    margin: 10px 0;
+    font-weight: 500;
+}
+
+/* ---------- Profile Pic ---------- */
+.profile-pic {
+    width: 160px;
+    border-radius: 50%;
+    border: 5px solid #14a800;
+    overflow: hidden;
+    flex-shrink: 0;
+    box-shadow: 0 6px 18px rgba(20, 168, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.profile-pic:hover {
+    transform: scale(1.05);
+}
+
+.profile-pic img.pic {
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.change-pic-label {
+    margin-top: 10px;
+    cursor: pointer;
+    color: #3b49df;
+    font-size: 22px;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.change-pic-label:hover {
+    color: #1d2bd1;
+    transform: scale(1.2);
+}
+
+/* ---------- Divider ---------- */
+hr {
+    border: none;
+    border-top: 2px dashed #c9d6df;
+    margin: 35px 0;
+}
+
+/* ---------- Read-Only Block ---------- */
+.readonly-block {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 25px 30px;
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    margin-bottom: 25px;
+    line-height: 1.8;
+    border-left: 6px solid #14a800;
+    transition: transform 0.2s ease;
+}
+
+.readonly-block:hover {
+    transform: translateY(-3px);
+}
+
+.readonly-block p {
+    margin: 10px 0;
+}
+
+.resume-link {
+    color: #0073e6;
+    text-decoration: underline;
+}
+
+.no-resume {
+    color: red;
+    font-weight: bold;
+}
+
+/* ---------- Form Styling ---------- */
+.update-form {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 25px 30px;
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    border-left: 6px solid #14a800;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 8px;
+    display: inline-block;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 15px;
+    transition: all 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    border-color: #14a800;
+    box-shadow: 0 0 8px rgba(20, 168, 0, 0.3);
+    outline: none;
+}
+
+/* ---------- Buttons ---------- */
+.update-btn {
+    background: linear-gradient(135deg, #14a800, #0e7a00);
+    color: #fff;
+    padding: 12px 22px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    margin-top: 15px;
+    margin-right: 10px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(20, 168, 0, 0.3);
+    transition: all 0.3s ease;
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+}
+
+.update-btn:hover {
+    background: linear-gradient(135deg, #0e7a00, #14a800);
+    transform: translateY(-3px);
+}
+
+.cancel-btn {
+    background: linear-gradient(135deg, #999, #666) !important;
+    box-shadow: 0 4px 10px rgba(120, 120, 120, 0.3);
+}
+
+.cancel-btn:hover {
+    background: linear-gradient(135deg, #666, #444) !important;
+}
+
+/* Red Logout Button */
+.logout-btn {
+    background: linear-gradient(135deg, #e63946, #c1121f) !important;
+    float: right;
+}
+
+.logout-btn:hover {
+    background: linear-gradient(135deg, #c1121f, #e63946) !important;
+    transform: scale(1.05);
+}
+
+/* Back Button */
+.back-btn {
+    float: right;
+    background: linear-gradient(135deg, #0077b6, #023e8a);
+}
+
+.back-btn:hover {
+    background: linear-gradient(135deg, #023e8a, #0077b6);
+    transform: scale(1.05);
+}
+
+/* ---------- Utility ---------- */
+.hidden {
+    display: none;
+}
