@@ -74,27 +74,28 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'SkillConnect.wsgi.application'
 
-# Database
-
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 if DATABASE_URL:
-    # Use PostgreSQL on Render
     DATABASES = {
-        'default': dj_database_url.config(
+        "default": dj_database_url.config(
             default=DATABASE_URL,
             conn_max_age=600,
             ssl_require=True
         )
     }
+
+    # Optional: ensure port is set
+    if not DATABASES["default"].get("PORT"):
+        DATABASES["default"]["PORT"] = "5432"
 else:
-    # Use SQLite locally or when DATABASE_URL is missing
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
         }
     }
+
 
 
 # ===============================
