@@ -125,7 +125,7 @@ def freelancer_Signup(request):
             return redirect('freelancer_Signup')
     else:
         form = FreelancerForm()
-    return render(request, 'freelancer_signup.html', {'form': form})
+    return render(request, 'freelancer_Signup.html', {'form': form})
 
 
 
@@ -155,7 +155,7 @@ def client_Signup(request):
             return redirect('client_Signup')
     else:
         form = ClientForm()
-    return render(request, 'client_signup.html', {'form': form})
+    return render(request, 'client_Signup.html', {'form': form})
 
 
 def login(request):
