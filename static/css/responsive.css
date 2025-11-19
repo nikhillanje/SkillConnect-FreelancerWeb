@@ -1,0 +1,194 @@
+@media (max-width: 1200px) {
+
+    .hero {
+        padding: 80px 5%;
+    }
+
+    .hero-content h1 {
+        font-size: 2.2rem;
+    }
+
+    .hero-image img {
+        width: 450px;
+    }
+
+    .cards-container.tab-content {
+        margin-left: 60px;
+        column-gap: 80px;
+    }
+
+    .testimonial-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+
+    .footer-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* 📱 Tablets / iPads */
+@media (max-width: 992px) {
+
+    /* Header */
+    .header {
+        flex-wrap: wrap;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .header .user-actions {
+        margin-top: 15px;
+    }
+
+    /* Hero section */
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 60px 5%;
+    }
+
+    .hero-container {
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .hero-content {
+        max-width: 100%;
+        margin-bottom: 30px;
+    }
+
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+
+    .hero-image img {
+        width: 100%;
+        max-width: 400px;
+    }
+
+    /* How it works */
+    .toggle-buttons {
+        flex-direction: column;
+        border-radius: 10px;
+    }
+
+    .cards-container.tab-content,
+    .tab-content.active {
+        margin-left: 0;
+        gap: 50px;
+    }
+
+    .card {
+        width: 220px;
+    }
+
+    /* Testimonials */
+    .testimonial-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    /* Footer */
+    .footer-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 40px;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer-legal {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+}
+
+/* 📞 Mobile Devices */
+@media (max-width: 600px) {
+
+    /* Header */
+    .header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .header .user-actions {
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .header .login-btn,
+    .header .signup-btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    /* Hero section */
+    .hero {
+        padding: 40px 5%;
+    }
+
+    .hero-content h1 {
+        font-size: 1.6rem;
+    }
+
+    .skillconnect-description {
+        font-size: 1rem;
+        text-align: justify;
+    }
+
+    .hero-image img {
+        width: 100%;
+        max-width: 320px;
+    }
+
+    /* Cards section */
+    .cards-container.tab-content,
+    .tab-content.active {
+        flex-direction: column;
+        align-items: center;
+        gap: 40px;
+        margin-left: 0;
+    }
+
+    .card {
+        width: 90%;
+        max-width: 300px;
+    }
+
+    .card img {
+        width: 100%;
+        height: auto;
+    }
+
+    /* Testimonials */
+    .testimonial-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .testimonial-card {
+        padding: 20px;
+    }
+
+    /* Footer */
+    .footer-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        text-align: center;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .footer-legal ul {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
