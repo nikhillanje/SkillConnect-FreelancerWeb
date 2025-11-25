@@ -687,3 +687,171 @@ h1 {
 .faq-item.active .faq-answer {
     display: block;
 }
+
+
+/* ---------- Mobile Phones (≤480px) ---------- */
+@media (max-width: 480px) {
+
+    /* Header */
+    .header {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .user-actions {
+        flex-direction: column;
+        width: 100%;
+        gap: 8px;
+    }
+
+    .login-btn,
+    .signup-btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    /* Hero Section */
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 40px 5%;
+    }
+
+    .hero-content h1 {
+        font-size: 28px;
+        white-space: normal;
+    }
+
+    .hero-image img {
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .skillconnect-description {
+        font-size: 14px;
+        text-align: justify;
+    }
+
+    /* How It Works cards */
+    .cards-container,
+    .tab-content.active {
+        margin-left: 0;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .card {
+        width: 90%;
+    }
+
+    .card img {
+        width: 100%;
+        height: auto;
+    }
+
+    /* Testimonials */
+    .testimonial-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Footer */
+    .footer-container {
+        grid-template-columns: 1fr;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer-legal {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+}
+
+/* ---------- Small Tablets (481px–768px) ---------- */
+@media (max-width: 768px) {
+
+    /* Header */
+    .header {
+        padding: 15px 3%;
+    }
+
+    /* Hero */
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 60px 3%;
+    }
+
+    .hero-content h1 {
+        font-size: 32px;
+        white-space: normal;
+    }
+
+    .hero-image img {
+        width: 90%;
+    }
+
+    .cards-container,
+    .tab-content.active {
+        margin-left: 0;
+        justify-content: center;
+        gap: 30px;
+    }
+
+    /* Testimonials */
+    .testimonial-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+
+    /* Footer */
+    .footer-container {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+}
+
+/* ---------- Tablets Landscape (769px–1024px) ---------- */
+@media (max-width: 1024px) {
+
+    /* Header */
+    .header {
+        padding: 20px 4%;
+    }
+
+    /* Hero Section */
+    .hero {
+        padding: 80px 4%;
+    }
+
+    .hero-container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .hero-image img {
+        width: 80%;
+    }
+
+    .cards-container,
+    .tab-content.active {
+        margin-left: 0;
+        justify-content: center;
+    }
+}
+
+/* ---------- Large Screens (>1024px) ---------- */
+@media (min-width: 1025px) {
+
+    .hero-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .hero-image img {
+        width: 550px;
+    }
+}
