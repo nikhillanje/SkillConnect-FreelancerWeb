@@ -8,7 +8,6 @@
     <title>SkillConnect - Your Freelancing Hub</title>
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
 </head>
 
 <body>
@@ -18,14 +17,7 @@
                 <img src="{% static 'images/logo.png' %}" alt="SkillConnect Logo" class="logo-img">
             </a>
         </div>
-        <!-- <nav class="nav">
-            <ul class="nav-links">
-                <li><a href="#">Find talent <i class="fa-solid fa-caret-down"></i></a></li>
-                <li><a href="#">Find work <i class="fa-solid fa-caret-down"></i></a></li>
-                <li><a href="#">Why SkillConnect <i class="fa-solid fa-caret-down"></i></a></li>
-                <li><a href="#">Pricing</a></li>
-            </ul>
-        </nav> -->
+
         <div class="user-actions">
             <a href="{% url 'admin:index' %}" class="login-btn">Admin</a>
             <a href="{% url 'login' %}" class="login-btn">Log in</a>
@@ -36,7 +28,6 @@
     <section class="hero">
         <div class="hero-container">
             <div class="hero-content">
-                <!-- <h1>Connecting work with skill</h1> -->
                 <i>
                     <h1 id="tping">Connecting work with skill !!!</h1>
                 </i>
@@ -44,34 +35,15 @@
                     SkillConnect is a modern freelancing platform designed to connect skilled professionals with
                     businesses and individuals seeking talent. With a focus on simplicity, trust, and efficiency,
                     SkillConnect makes it easy for freelancers to showcase their expertise and for clients to find the
-                    right match for their projects. Whether you’re hiring or looking for work, our platform provides a
-                    seamless experience with secure collaboration, transparent communication, and opportunities that
-                    help both freelancers and businesses grow together.
+                    right match for their projects.
                 </p>
-
-                <!-- <div class="search-container">
-                <div class="search-tabs">
-                    <button class="search-tab active">Find talent</button>
-                    <button class="search-tab">Browse jobs</button>
-                </div>
-                <div class="search-box">
-                    <input type="text" placeholder="Search by role, skills, or keywords">
-                    <button class="search-btn"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
-                </div>
-            </div>
-            <div class="client-logos">
-                <img src="https://via.placeholder.com/100x40.png?text=Microsoft" alt="Microsoft Logo">
-                <img src="https://via.placeholder.com/100x40.png?text=Airbnb" alt="Airbnb Logo">
-                <img src="https://via.placeholder.com/100x40.png?text=Glassdoor" alt="Glassdoor Logo">
-            </div> -->
             </div>
 
-        </div>
-        <div class="hero-image">
-            <img src="{% static 'images/home.png' %}" alt="SkillConnect Hero">
+            <div class="hero-image">
+                <img src="{% static 'images/home.png' %}" alt="SkillConnect Hero">
+            </div>
         </div>
     </section>
-
 
     <section class="how-it-works">
         <div class="how-it-works-container">
@@ -83,7 +55,6 @@
                 </div>
             </div>
 
-            <!-- Hiring Content -->
             <div class="cards-container tab-content active" id="hiring">
                 <div class="card">
                     <img src="{% static 'images/home1.png' %}" alt="img1">
@@ -99,7 +70,6 @@
                 </div>
             </div>
 
-            <!-- Finding Work Content -->
             <div class="cards-container tab-content" id="finding">
                 <div class="card">
                     <img src="{% static 'images/home4.png' %}" alt="img4">
@@ -117,15 +87,12 @@
         </div>
     </section>
 
-
     <section class="testimonials">
         <h2>Feedbacks from clients</h2>
         <div class="testimonial-grid">
             {% for fb in feedbacks %}
             <div class="testimonial-card">
-                <div class="header-icon">
-                    <i class="fa-solid fa-star"></i> {{ fb.category }}
-                </div>
+                <div class="header-icon"><i class="fa-solid fa-star"></i> {{ fb.category }}</div>
                 <p>"{{ fb.feedback_text }}"</p>
                 <div class="rating">
                     {% for i in stars_range %}
@@ -135,15 +102,13 @@
                         {% endif %}
                         {% endfor %}
                 </div>
-
                 <div class="freelancer-info">
                     <div class="avatar-container">
                         {% if fb.client_profile_pic %}
-                        <img src="{{ fb.client_profile_pic.url }}" alt="{{ fb.client_name }}" class="avatar">
+                        <img src="{{ fb.client_profile_pic.url }}" class="avatar">
                         {% else %}
-                        <img src="{% static 'images/default.png' %}" alt="default avatar" class="avatar">
+                        <img src="{% static 'images/default.png' %}" class="avatar">
                         {% endif %}
-
                     </div>
                     <div class="details">
                         {% if fb.freelancer %}
@@ -155,121 +120,18 @@
                 </div>
             </div>
             {% empty %}
-            <p style="text-align:center; width:100%;">No feedback available yet.</p>
+            <p>No feedback available yet.</p>
             {% endfor %}
         </div>
     </section>
 
-    <h2 style="font-size: 35px; font-weight: bold; " class="testimonials">Frquently Asked Questions</h2>
+    <h2 class="testimonials" style="font-size: 35px;">Frequently Asked Questions</h2>
+
     <footer class="footer">
+
         <div class="footer-container">
-            <div class="footer-column">
-                <h4>FAQ</h4>
-                <ul class="faq-list">
-                    <li class="faq-item">
-                        <a href="#">How do I create a freelancer/client account?</a>
-                        <i class="fa-solid fa-chevron-down faq-toggle"></i>
-                        <div class="faq-answer">You can sign up as a freelancer or client by clicking on the signup
-                            button and selecting your role.</div>
-                    </li>
-                    <li class="faq-item">
-                        <a href="#">Is this platform only for Indian users?</a>
-                        <i class="fa-solid fa-chevron-down faq-toggle"></i>
-                        <div class="faq-answer">Yes, currently our platform is designed only for Indian freelancers and
-                            clients.</div>
-                    </li>
-                    <li class="faq-item">
-                        <a href="#">How are payments handled securely?</a>
-                        <i class="fa-solid fa-chevron-down faq-toggle"></i>
-                        <div class="faq-answer">Payments are processed through secure gateways with escrow protection
-                            for both clients and freelancers.</div>
-                    </li>
-                    <li class="faq-item">
-                        <a href="#">What service fees are charged?</a>
-                        <i class="fa-solid fa-chevron-down faq-toggle"></i>
-                        <div class="faq-answer">A small percentage of the project fee is charged as a service fee.
-                            Details are available on our pricing page.</div>
-                    </li>
-                    <li class="faq-item">
-                        <a href="#">How do I contact support?</a>
-                        <i class="fa-solid fa-chevron-down faq-toggle"></i>
-                        <div class="faq-answer">You can contact our support team through the “Contact Us” page or email
-                            us directly.</div>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="footer-column">
-                <h4>For Clients</h4>
-                <ul class="faq-list">
-                    <li class="faq-item">
-                        <a href="#">How to hire</a>
-                        <i class="fa-solid fa-chevron-down faq-toggle"></i>
-                        <div class="faq-answer">Browse freelancers, review profiles, and send hire requests directly.
-                        </div>
-                    </li>
-                    <li class="faq-item">
-                        <a href="#">Talent Marketplace</a>
-                        <i class="fa-solid fa-chevron-down faq-toggle"></i>
-                        <div class="faq-answer">Explore a wide marketplace of freelancers across different categories.
-                        </div>
-                    </li>
-                    <li class="faq-item">
-                        <a href="#">Project Catalog</a>
-                        <i class="fa-solid fa-chevron-down faq-toggle"></i>
-                        <div class="faq-answer">Clients can browse ready-made project offers and purchase directly.
-                        </div>
-                    </li>
-                    <li class="faq-item">
-                        <a href="#">Hire an agency</a>
-                        <i class="fa-solid fa-chevron-down faq-toggle"></i>
-                        <div class="faq-answer">Agencies allow you to hire a full team of experts for bigger projects.
-                        </div>
-                    </li>
-                    <li class="faq-item">
-                        <a href="#">Enterprise</a>
-                        <i class="fa-solid fa-chevron-down faq-toggle"></i>
-                        <div class="faq-answer">Large companies can access our enterprise solutions with dedicated
-                            support.</div>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="footer-column">
-                <h4>For Talent</h4>
-                <ul class="faq-list">
-                    <li class="faq-item">
-                        <a href="#">How to find work</a>
-                        <i class="fa-solid fa-chevron-down faq-toggle"></i>
-                        <div class="faq-answer">Apply to jobs posted by clients or showcase your project catalog.</div>
-                    </li>
-                    <li class="faq-item">
-                        <a href="#">Direct Contracts</a>
-                        <i class="fa-solid fa-chevron-down faq-toggle"></i>
-                        <div class="faq-answer">Work with clients directly and manage contracts safely on the platform.
-                        </div>
-                    </li>
-                    <li class="faq-item">
-                        <a href="#">Freelance jobs in India</a>
-                        <i class="fa-solid fa-chevron-down faq-toggle"></i>
-                        <div class="faq-answer">We list verified freelance jobs only from India to ensure authenticity.
-                        </div>
-                    </li>
-                    <li class="faq-item">
-                        <a href="#">Win work with ads</a>
-                        <i class="fa-solid fa-chevron-down faq-toggle"></i>
-                        <div class="faq-answer">Boost your profile visibility by promoting your services.</div>
-                    </li>
-                    <li class="faq-item">
-                        <a href="#">Freelancer Plus resources</a>
-                        <i class="fa-solid fa-chevron-down faq-toggle"></i>
-                        <div class="faq-answer">Upgrade to Freelancer Plus for premium job insights and resources.</div>
-                    </li>
-                </ul>
-            </div>
-
-
-        </div>
+            <!-- Same FAQ HTML -->
+            {{ footer_html|safe }}
         </div>
 
         <div class="footer-bottom">
@@ -281,25 +143,25 @@
                 <a href="#"><i class="fa-brands fa-youtube"></i></a>
                 <a href="#"><i class="fa-brands fa-instagram"></i></a>
             </div>
+
             <div class="app-links">
                 <p>Mobile app</p>
                 <a href="#"><i class="fa-brands fa-apple"></i></a>
                 <a href="#"><i class="fa-brands fa-android"></i></a>
             </div>
         </div>
+
         <div class="footer-legal">
-            <p>&copy; 2015 - 2025 SkillConnect® Global Inc. </p>
+            <p>&copy; 2015 - 2025 SkillConnect® Global Inc.</p>
             <ul>
-                <li><a href="#">Terms of Service</a></li>
-                <li><a href="#">Privacy Policy</a></li>
-                <li><a href="#">CA Notice at Collection</a></li>
-                <li><a href="#">Cookie Settings</a></li>
-                <li><a href="#">Accessibility</a></li>
+                <li><a href="#">Terms</a></li>
+                <li><a href="#">Privacy</a></li>
+                <li><a href="#">Cookies</a></li>
             </ul>
         </div>
+
     </footer>
 
-    <script src="{% static 'js/index.js' %}"></script>
 </body>
 
 </html>
